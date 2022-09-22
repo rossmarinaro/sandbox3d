@@ -1,0 +1,19 @@
+
+{
+    "assets": [
+        { "xbot": "assets/meshes/xbot.fbx" },
+        { "test_monkey": "assets/meshes/test_monkey.glb" },
+        { "meatball_mountains": "assets/meshes/meatball_mountain.glb" },
+        { "meatball_3d": "assets/meshes/meatbaddie.glb" },
+        { "ikura_maki_tile": "assets/meshes/ikura.glb" },
+        { "automac1000": "assets/meshes/automac1000.glb" },
+        { "rolling_pin1": "assets/meshes/rolling_pin1.glb" },
+        { "room": "assets/meshes/room.glb" },
+        { "level": "assets/meshes/level.glb" },
+        { "bullet_3d": "assets/meshes/macaroni.glb" },
+        { "penne_3d": "assets/meshes/penne_3d.glb" },
+        { "glove_yellow": "assets/textures/glove_yellow.png" }
+
+
+    ]
+}
