@@ -3,7 +3,7 @@ import { THREE, ExtendedObject3D, Scene3D, FirstPersonControls } from '@enable3d
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { System } from '../system/Config';
 
-import { ItemProp } from './ItemProp';
+import { Actor } from './Actor';
 import { Inventory3D } from './inventory/manager';
 
 //------------------------------------------------- player
@@ -28,7 +28,7 @@ export class Player {
     public rotationSpeed: number
     public health: number
     public hitbox: any
-    public itemProp: ItemProp | null
+    public Actor: Actor | null
     public self = {
       skin: new ExtendedObject3D(),
       object: new ExtendedObject3D() 
@@ -326,11 +326,8 @@ export class Player {
 
     public dropItem (equipped: string): void
     {
-      if (equipped === 'rolling_pin1')
-        return;
 
-      let pos = this.self.skin.position; 
-      new ItemProp(this.scene, equipped, pos.x, pos.y - 5, pos.z);
+
     }
 
   
