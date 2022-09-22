@@ -1,4 +1,4 @@
-const port = process.env.PORT || 9000,
+const port = process.env.PORT || 3000,
 
   webpack = require('webpack'),
   path = require('path'),

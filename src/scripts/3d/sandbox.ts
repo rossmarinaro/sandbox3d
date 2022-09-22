@@ -185,6 +185,7 @@ export class Sandbox3D extends Scene3D {
             }
           }
           });
+          obj.rotation.set(0, 0.2, 0)
           obj.position.set(120, -50, 100)
           obj.scale.set(0.25, 0.25, 0.25)
           obj.children[0].children.forEach(i => {
@@ -199,14 +200,15 @@ export class Sandbox3D extends Scene3D {
         sue[0].morphTargetInfluences[0] = 1;
         sue[0].morphTargetInfluences[1] = 1;
 
-         // console.log(bones1, bones2)
-          for (let bone1 in bones1)
-          {
-            for (let bone2 in bones2)
-            {
-              console.log(bone1, bone2)
-            }
-          }
+          console.log(test2, test3)
+
+          // for (let bone1 in bones1)
+          // {
+          //   for (let bone2 in bones2)
+          //   {
+          //     console.log(bones1[bone1], bones2[bone2])
+          //   }
+          // }
 
       });
 

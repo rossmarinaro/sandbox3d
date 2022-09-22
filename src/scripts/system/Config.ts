@@ -120,8 +120,8 @@ export class Config {
 
         ////(larger config affects performance)
 
-            this.width = 850;
-            this.height = 700; 
+            this.width = innerWidth;
+            this.height = innerHeight; 
 
             this.velX = 6,
             this.velY = 26;
