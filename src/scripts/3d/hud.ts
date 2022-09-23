@@ -58,13 +58,12 @@ export class HUD {
                 switch (i.name)
                 {
                   case 'bot A': 
-                  if (rotation > 3)
-                    resetText(this.textA, i.obj, 0);
-                    this.textA.setText(`y-rotation A:   ${rotation}`); 
+                  //if (rotation > 3)
+                    //resetText(this.textA, i.obj, 0);
+                  this.textA.setText(`y-rotation A:   ${rotation}`); 
                   break;
                   case 'bot B':
-                    //if (rotation > 0) 
-                     // resetText(this.textB);
+              
                     this.textB.setText(`y-rotation B:   ${rotation}`); 
                   break;
                 }

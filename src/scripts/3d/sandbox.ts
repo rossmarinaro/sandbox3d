@@ -65,10 +65,14 @@ export class Sandbox3D extends Scene3D {
       this.hud = new HUD(this, 'Sandbox3D');
       this.controller = new Controller(this, this.player);
 
+    //monkey head
+
       new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25);
 
-      let botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.001),
-          botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.25, -0.001);
+    //xbots
+
+      let botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1),
+          botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.25, -0.01);
   
       
 
