@@ -1,39 +1,45 @@
 
 import { ExtendedMesh, ExtendedObject3D, Scene3D } from '@enable3d/phaser-extension';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Inventory3D } from './inventory/manager';
+
 
 
 //------------------------------------------------------------------------- RIFLE
 
 export class Actor extends ExtendedObject3D {
 
-    public static bones1: ExtendedMesh[]
-    public static bones2: ExtendedMesh[]
+    public static bones1: ExtendedMesh[] = []
+    public static bones2: ExtendedMesh[] = []
+    public obj: ExtendedMesh | null
 
     private scene: Scene3D
+    private key: string
     private x: number 
     private y: number 
     private z: number 
     private _scale: number | undefined
+    private rotationRate: number | undefined
     
     public _id: number | string | undefined
 
-    constructor(scene: Scene3D, key: string, type: string, x: number, y: number, z: number, scale?: number)
+    constructor(scene: Scene3D, key: string, type: string, name: string, x: number, y: number, z: number, scale?: number, rotationRate?: number)
     {
       super();
 
       this.scene = scene;
-      this.name = key;
+      this.key = key;
+      this.name = name;
       this.type = type;
       this._scale = scale;
+      this.rotationRate = rotationRate;
       this.x = x;
       this.y = y;
       this.z = z;
+      this.obj = null;
 
       this.type === 'glb' ?
-        this.scene.third.load.gltf(this.name).then((obj: GLTF) => this.initGLB(obj)) :
-        this.scene.third.load.fbx(this.name).then((obj: any) => this.initFBX(obj));
+        this.scene.third.load.gltf(this.key).then((obj: GLTF) => this.initGLB(obj)) :
+        this.scene.third.load.fbx(this.key).then((obj: any) => this.initFBX(obj));
 
     
     }
@@ -120,26 +126,22 @@ export class Actor extends ExtendedObject3D {
           });
 
           obj.position.set(this.x, this.y, this.z);
+
           if (this._scale)
             obj.scale.set(this._scale, this._scale, this._scale);
 
             this.scene.events.on('update', ()=> {
-              obj.rotation.y += 0.03;
-              if (obj.rotation.y === 3)
-                console.log(true);
+              obj.rotation.y += this.rotationRate;
+              this.obj = obj;
+      
             });
             
-          obj.children[0].children.forEach(i => {
-            Actor.bones1.push(i)
-           // console.log(i)
-          });
+          obj.children[0].children.forEach((i: ExtendedMesh) => Actor.bones1.push(i));
   
       this.traverse((child: any) => {
   
         if (child.isMesh)
         {
-
-      
           child.castShadow = child.receiveShadow = true;
           if (child.material)
           {
@@ -149,8 +151,5 @@ export class Actor extends ExtendedObject3D {
         }
       });
 
-      
-      
-    
     }
 }

@@ -148,7 +148,7 @@ export class Controller {
         //// lock the pointer and update the first person control
   
             this.scene.input
-            .on('pointerdown', () => !this.scene.scene.get('Menu3D').scene.settings.active && this.scene.input.mouse.requestPointerLock())
+            .on('pointerdown', () => this.scene.input.mouse.requestPointerLock())
             .on('pointermove', (pointer: Phaser.Input.Pointer) => {
                 if (this.scene.input.mouse.locked)
                 {
@@ -320,17 +320,10 @@ export class Controller {
     //------------- crouch
 
         if (this.keys.q.isDown)
-        {
           this.crouching = true;
-          //this.scene.third.camera.rotateZ(0.2);
-          //this.firstPersonControls.offset = new THREE.Vector3(Math.sin(this.theta + Math.PI * 0.5) * 0.4, 0, Math.cos(this.theta + Math.PI * 0.5) * 0.4);
-        }
         else if (this.keys.e.isDown)
-        {
           this.crouching = false;
-          //this.scene.third.camera.rotateZ(-0.2);
-          //this.firstPersonControls.offset = new THREE.Vector3(Math.sin(this.theta - Math.PI * 0.5) * 0.4, 0, Math.cos(this.theta - Math.PI * 0.5) * 0.4);
-        }
+        
 
     //------- trigger jump
 

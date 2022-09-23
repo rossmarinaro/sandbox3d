@@ -36,7 +36,7 @@ import { Shaders } from './shaders';
     private init(): void 
     {
 
-      //this.scene.third.load.texture('glove_purple').then(texture => {
+      //this.scene.third.load.texture('').then(texture => {
 
         const
             //material = new THREE.MeshLambertMaterial({map: texture, transparent: false}),

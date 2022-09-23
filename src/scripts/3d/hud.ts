@@ -1,30 +1,33 @@
 //------------------------------------------------- HUD
 
-import { Scene3D } from '@enable3d/phaser-extension';
+import { ExtendedMesh, Scene3D } from '@enable3d/phaser-extension';
 
 export class HUD {
 
   private scene: Phaser.Scene | any
   private initialized: boolean = false;
-  private score: Phaser.GameObjects.Text
-  private scoreText: Phaser.GameObjects.Text
+  private textA: Phaser.GameObjects.Text
+  private textB: Phaser.GameObjects.Text
+  private textC: Phaser.GameObjects.Text
 
     constructor(scene: Phaser.Scene, HUDType: string)
     {
       this.scene = scene;
-      this._init();
+      this.init();
     }
 
-    private _init(): void
+    private init(): void
     { 
   
     //------------- UI
 
 
-      ////score text
+      //// text
 
-        this.score = this.scene.add.text(50, 50, 'SCORE: ', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
-        this.scoreText = this.scene.add.text(180, 50, this.scene.score.toString(), {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textA = this.scene.add.text(50, 50, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textB = this.scene.add.text(50, 100, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textC = this.scene.add.text(50, 150, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+
         this.initialized = true;
 
       //listen for resize
@@ -33,17 +36,54 @@ export class HUD {
         screen.orientation?.addEventListener('change', ()=> this.resizeWindow(this.scene), false);
         screen.orientation?.addEventListener('webkitfullscreenchange', ()=> this.resizeWindow(this.scene), false);
 
+        const resetText = (txt: Phaser.GameObjects.Text, obj: ExtendedMesh, rotation: number) => {
+          obj.rotation.set(0, rotation, 0);
+          txt.setText(obj.rotation.y.toFixed(2).toString());
+        }
 
       //----------- on scene update
+
+      let done = false;
   
-          this.scene.events.on('update', ()=> {
+      this.scene.events.on('update', ()=> {
 
-            if (!this.initialized)
-              return;
+          if (!this.initialized)
+            return;
 
-            if (this.scoreText)
-              this.scoreText.setText(this.scene.score.toString()); 
+            this.scene.entities.filter((i: any) => {
+              if (i.key === 'xbot' && i.obj !== null)
+              {
+                let rotation = i.obj.rotation.y.toFixed(2).toString();
 
+                switch (i.name)
+                {
+                  case 'bot A': 
+                  if (rotation > 3)
+                    resetText(this.textA, i.obj, 0);
+                    this.textA.setText(`y-rotation A:   ${rotation}`); 
+                  break;
+                  case 'bot B':
+                    //if (rotation > 0) 
+                     // resetText(this.textB);
+                    this.textB.setText(`y-rotation B:   ${rotation}`); 
+                  break;
+                }
+
+                let areFacing = i.obj.rotation.y === 1 ? true : false;
+
+                this.textC.setText(`are A and B facing?: ${areFacing}`); 
+        
+
+                if (areFacing === true && done === false)
+                {
+                  done = true;
+                  this.alert('is facing!');
+                }
+              }
+
+            }); 
+
+         
       });
 
      
@@ -73,14 +113,10 @@ export class HUD {
       if (innerWidth < innerHeight) //portrait
       {
 
-        this.score.setPosition(this.scene.cameras.main.width - 180, 50);
-        this.scoreText.setPosition(this.scene.cameras.main.width - 100, 50);
       }
       else
       {
 
-        this.score.setPosition(innerWidth - 180, 50);
-        this.scoreText.setPosition(innerWidth - 100, 50);
       }
     }
 }

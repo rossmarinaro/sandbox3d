@@ -7,8 +7,7 @@ import { HUD } from '../3d/hud';
 import { Controller } from '../3d/controller';
 import { Level } from './level';
 import { Actor } from './Actor';
-import { Inventory3D } from './inventory/manager';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+
 
 
 export class Sandbox3D extends Scene3D {
@@ -20,7 +19,7 @@ export class Sandbox3D extends Scene3D {
     private player: Player | null = null
     private hud: HUD
     private controller: Controller
-    private entities: Player[] = []
+    private entities: any[] = []
 
     private _scene: Phaser.Scene
     private players: Player[]
@@ -34,14 +33,9 @@ export class Sandbox3D extends Scene3D {
     {
       
       this._scene = scene;
-      this.players = [];
-      this.pickups = [];
+
       this.score = 0;
 
-      this.data['weapons'] = ['']; 
-      this.data['items'] = [];
-      this.data['powerups'] = [];
-      Inventory3D.resetAmmo(0);
 
       System.orientation.unlock();
       System.makeTransparantBackground(scene);
@@ -71,21 +65,16 @@ export class Sandbox3D extends Scene3D {
       this.hud = new HUD(this, 'Sandbox3D');
       this.controller = new Controller(this, this.player);
 
-      //Inventory3D.setItem(this, 'rolling_pin1');
+      new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25);
 
-    //entities
-  
-      this.entities = [this.player]; 
-
-  
-      new Actor(this, 'test_monkey', 'glb', 100, -40, 100, 5.25);
-
-      new Actor(this, 'xbot', 'fbx', 120, -50, 100, 0.25);
-      new Actor(this, 'xbot', 'fbx', 120, -50, 80, 0.25);
+      let botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.001),
+          botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.25, -0.001);
   
       
 
-
+    //entities
+  
+    this.entities = [this.player, botA, botB]; 
 
 
     }

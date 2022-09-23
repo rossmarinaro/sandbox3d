@@ -86,10 +86,8 @@ module.exports = {
     new HtmlWebpackPlugin({ gameName: 'Pastaboss: A Recipe For Disaster', template: 'src/index.html', inject: 'body' }),
     new CopyWebpackPlugin([
       { from: 'src/assets', to: 'assets' },
-      { from: 'pwa', to: '' }
+
     ]),
-    new InjectManifest({
-      swSrc: path.resolve(__dirname, '../pwa/sw.js')
-    })
+
   ]
 }

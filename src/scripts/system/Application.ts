@@ -6,14 +6,12 @@ import { Config, System } from './Config';
 
 
 import { AudioManager } from './Audio';
-import { AjaxManager } from './ajax.js';
 import { EventManager } from './eventManager';
 import { Boot } from '../preload/Boot';
 import { Preload } from '../preload/Preload';
-import { Text, TextUI } from './Text.js';
 import { Camera } from './camera';
 import { Sandbox3D } from '../3d/sandbox';
-import { Menu3D } from '../3d/menu';
+
 
 //------------------------------------ APP
 
@@ -27,15 +25,9 @@ export default class Application {
     public pipeline: any[]
     public groundArray: any[]
     public gameState: boolean = false
-    public gameSaved: boolean = false
-    public cutScene: boolean = false
-    public interact: boolean = false
-    public fightBoss: boolean = false
- 
-    public ajax: AjaxManager
+
     public audio: AudioManager
     public cam: Camera
-    public text: Text
     public events: EventManager
 
 
@@ -57,11 +49,9 @@ export default class Application {
     constructor(system: Config)
     {  
 
-        this.ajax = new AjaxManager;
         this.audio = new AudioManager;
         this.cam = new Camera;
         this.events = new EventManager;
-        this.text = new Text;
         this.type = Phaser.WEBGL;
         this.transparent = true,
         this.parent = 'game';
@@ -103,9 +93,7 @@ export default class Application {
 
             new Boot,
             new Preload,  
-            new TextUI, 
-            new Sandbox3D,
-            new Menu3D
+            new Sandbox3D
 
         ];
 
@@ -125,8 +113,6 @@ export default class Application {
 
         System.app.timeWarp = 1;
         System.app.timeOfDay = this.hours * System.app.timeWarp; 
-
-        System.app.text.textType = 'dialog';  
 
     ////events / map, level
 

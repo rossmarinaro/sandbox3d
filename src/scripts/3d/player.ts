@@ -4,7 +4,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { System } from '../system/Config';
 
 import { Actor } from './Actor';
-import { Inventory3D } from './inventory/manager';
+
 
 //------------------------------------------------- player
 
@@ -103,22 +103,7 @@ export class Player {
 
     public defaultStance(time: number, joystick1: any, keys: any, leftStick: any): void
     {
-      if (
-        (keys && keys.w.isDown) || 
-        (joystick1 && joystick1.forceY < -40) || 
-        (leftStick && leftStick.y === -1) 
-      )
-      {
-        this.movement.x = Math.sin(time * -0.015) * 0.075;
-        this.movement.y = Math.sin(time * 0.015) * 0.075;
-        this.movement.z = Math.sin(time * 0.015) * 0.075;
-      } 
-      else
-      {
-        this.movement.x = Math.sin(time * -0.003) * 0.01;
-        this.movement.y = Math.sin(time * 0.003) * 0.01;
-        this.movement.z = Math.sin(time * 0.003) * 0.01;
-      }
+   
     }
 
   //--------------------------------------------------- player crouch
@@ -295,31 +280,6 @@ export class Player {
     }
   }
 
-  //---------------------------------------------- apply proper glove color based on player's skin
-
-
-    public async getGloveColor (color: string): Promise<string>
-    {
-      switch(color)
-      {
-        case 'yellow':
-          return 'orange';
-        case 'orange':
-          return 'green';
-        case 'red':
-          return 'yellow';
-        case 'green':
-          return 'blue';
-        case 'blue':
-          return 'red';
-        case 'indigo':
-          return 'purple';
-        case 'purple':
-          return 'indigo';
-        default: 
-          return 'yellow';
-      }
-    }
 
   //---------------------------------------------- drop item / weapon
   
