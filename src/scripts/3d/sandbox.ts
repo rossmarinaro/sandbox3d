@@ -71,14 +71,21 @@ export class Sandbox3D extends Scene3D {
 
     //xbots
 
-      let botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1),
-          botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.25, -0.01);
+      let botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1)//,
+         // botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.25, -0.01);
   
-      
+      // this.time.delayedCall(1000, ()=> {
+      //   if (botB.obj !== null)
+      //   {
+      //     botB.obj.rotation.y = 6.2
+      //   //botB.obj?.rotateY(3);
+      //   //alert(botB.obj?.rotation.y)
+      //   }
+      // })
 
     //entities
   
-    this.entities = [this.player, botA, botB]; 
+    this.entities = [this.player, botA/* , botB */]; 
 
 
     }

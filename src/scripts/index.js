@@ -1,4 +1,4 @@
-//import '../style.css';
+import '../style.css';
 
 import * as Phaser from 'phaser'
 import { enable3d } from '@enable3d/phaser-extension';   

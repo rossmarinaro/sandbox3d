@@ -170,8 +170,6 @@ export class Player {
             x = direction.x * 100, 
             z = direction.z * 100;
 
-          direction.normalize();
-
     //right
       if (forceX > 40) 
       {

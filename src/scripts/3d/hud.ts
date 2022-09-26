@@ -1,6 +1,6 @@
 //------------------------------------------------- HUD
 
-import { ExtendedMesh, Scene3D } from '@enable3d/phaser-extension';
+import { ExtendedMesh, Scene3D, THREE } from '@enable3d/phaser-extension';
 
 export class HUD {
 
@@ -9,6 +9,7 @@ export class HUD {
   private textA: Phaser.GameObjects.Text
   private textB: Phaser.GameObjects.Text
   private textC: Phaser.GameObjects.Text
+  private textD: Phaser.GameObjects.Text
 
     constructor(scene: Phaser.Scene, HUDType: string)
     {
@@ -27,6 +28,7 @@ export class HUD {
         this.textA = this.scene.add.text(50, 50, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
         this.textB = this.scene.add.text(50, 100, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
         this.textC = this.scene.add.text(50, 150, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textD = this.scene.add.text(50, 200, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
 
         this.initialized = true;
 
@@ -36,14 +38,8 @@ export class HUD {
         screen.orientation?.addEventListener('change', ()=> this.resizeWindow(this.scene), false);
         screen.orientation?.addEventListener('webkitfullscreenchange', ()=> this.resizeWindow(this.scene), false);
 
-        const resetText = (txt: Phaser.GameObjects.Text, obj: ExtendedMesh, rotation: number) => {
-          obj.rotation.set(0, rotation, 0);
-          txt.setText(obj.rotation.y.toFixed(2).toString());
-        }
 
       //----------- on scene update
-
-      let done = false;
   
       this.scene.events.on('update', ()=> {
 
@@ -51,43 +47,59 @@ export class HUD {
             return;
 
             this.scene.entities.filter((i: any) => {
+
               if (i.key === 'xbot' && i.obj !== null)
               {
-                let rotation = i.obj.rotation.y.toFixed(2).toString();
 
-                switch (i.name)
-                {
-                  case 'bot A': 
-                  //if (rotation > 3)
-                    //resetText(this.textA, i.obj, 0);
-                  this.textA.setText(`y-rotation A:   ${rotation}`); 
-                  break;
-                  case 'bot B':
-              
-                    this.textB.setText(`y-rotation B:   ${rotation}`); 
-                  break;
-                }
+                const cam = this.scene.third.camera, 
+                      player = this.scene['player'],
+                      playerPos = this.scene['player'].self.object.position;
 
-                let areFacing = i.obj.rotation.y === 1 ? true : false;
-
-                this.textC.setText(`are A and B facing?: ${areFacing}`); 
+                let direction: any = null,
+                    position = i.obj.position,
+                    rotation = i.obj.rotation.y.toFixed(2).toString(),
+                    vecA = new THREE.Vector3(playerPos.x, playerPos.y, playerPos.z),
+                    vecB = new THREE.Vector3(position.x, position.y, position.z), 
         
+                    vecA_length = Math.sqrt(vecA.x * vecA.x + vecA.y * vecA.y + vecA.z * vecA.z), 
+                    vecB_length = Math.sqrt(vecB.x * vecB.x + vecB.y * vecB.y + vecB.z * vecB.z), 
+                
+                    inverse_length_vecA = 1 / vecA_length, 
+                    inverse_length_vecB = 1 / vecB_length, 
+                
+                    unit_vecA = new THREE.Vector3(vecA.x * inverse_length_vecA, vecA.y * inverse_length_vecA, vecA.z * inverse_length_vecA), 
+                    unit_vecB = new THREE.Vector3(vecB.x * inverse_length_vecB, vecB.y * inverse_length_vecB, vecB.z * inverse_length_vecB), 
+                
+                    dotProd = (unit_vecA.x * unit_vecB.x) + (unit_vecA.y * unit_vecB.y) + (unit_vecA.z * unit_vecB.z);
 
-                if (areFacing === true && done === false)
+                if (player.raycaster.ray)
+                  direction = cam.getWorldDirection(player.raycaster.ray.direction);
+
+                if (i.name === 'bot A')
                 {
-                  done = true;
-                  this.alert('is facing!');
+                  this.textB.setText(`bot A position: (x: ${position.x}, y: ${position.y}, z: ${position.z}), y-rotations: ${rotation}`);
+                  this.textA.setText(`your position: (x: ${playerPos.x.toFixed(2)}, y: ${playerPos.y.toFixed(2)}, z: ${playerPos.z.toFixed(2)})`);
+                  this.textC.setText(`dot product is: ${dotProd.toFixed(2)}`);
+                  this.textD.setText(`normalized direction: x: ${direction.normalize().x.toFixed(2)}, y: ${direction.normalize().y.toFixed(2)}, z: ${direction.normalize().z.toFixed(2)}`);
                 }
+              
               }
-
+            
             }); 
+
 
          
       });
 
-     
+  
+
 
     }
+
+    // public getDotProduct(vec: THREE.Vector3): number
+    // {
+    //   return (x * vec.x + y * vec.y + z * vec.z)
+    // }
 
     //------------------------------------
 
@@ -121,3 +133,34 @@ export class HUD {
 }
   
   
+
+
+/*
+
+
+let vecA = new THREE.Vector3(3, -5, 7),
+    vecB = new THREE.Vector3(5, -2, -9)
+
+    base = (vecA.x * vecB.x) + (vecA.y * vecB.y) + (vecA.z * vecB.z)) = 15 + 10 - 63 = -38
+
+let vecA_length = Math.sqrt(vecA.x * vecA.x + vecA.y * vecA.y + vecA.z * vecA.z) = Math.sqrt(9 + 25 + 49) = Math.sqrt(83) = 9.1100433
+    vecB_length = Math.sqrt(vecB. * vecB.x + vecB.y * vecB.y + vecB.z * vecB.z) = Math.sqrt(25 + 4 + 81) = Math.sqrt(110) = 10.488088
+
+    inverse_length_vecA = 1 / vecA_length = 0.1097642
+    inverse_length_vecB = 1 / vecB_length = 0.0953463
+
+let unit_vecA = (vecA.x * inverse_length_vecA, vecA.y * inverse_length_vecA, vecA.z * inverse_length_vecA) = (0.3292926, -0.548821, 0.7683494)
+    unit_vecB = (vecB.x * inverse_length_vecB, vecB.y * inverse_length_vecB, vecB.z * inverse_length_vecB) = (0.4767315, -01906926, -0.8581167)
+
+    dot prod = (unit_vecA.x * unit_vecB.x) + (unit_vecA.y * unit_vecB.y) + (unit_vecA.z * unit_vecB.z) = Math.floor().toFixed(2)
+
+public getDotProduct(vec: THREE.Vector3): number
+{
+  return (x * vec.x + y * vec.y + z * vec.z)
+}
+
+
+
+
+
+*/
