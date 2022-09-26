@@ -81,7 +81,7 @@ export class HUD {
                   this.textA.setText(`your position: (x: ${playerPos.x.toFixed(2)}, y: ${playerPos.y.toFixed(2)}, z: ${playerPos.z.toFixed(2)})`);
                   this.textC.setText(`dot product is: ${dotProd.toFixed(2)}`);
                   this.textD.setText(`normalized direction: x: ${direction.normalize().x.toFixed(2)}, y: ${direction.normalize().y.toFixed(2)}, z: ${direction.normalize().z.toFixed(2)}`);
-                }
+                }   
               
               }
             
