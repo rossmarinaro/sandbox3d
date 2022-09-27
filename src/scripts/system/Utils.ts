@@ -140,7 +140,7 @@ export class Utils {
 
                 let bone = arr.filter(i => Math.min(i.pos));
                 
-                console.log('distance: ', distance, '\nsum: ', sum, '\nbone: ', bone);
+                console.log('distance: ', distance, '\nsum: ', sum, '\nbone: ', bone);   
 
 
 
