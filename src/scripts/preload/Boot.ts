@@ -1,10 +1,9 @@
 /* BOOT */
 
 import { System } from '../system/Config';
+import { Utils } from '../system/Utils';
 
 import resources_3d from './resources/3d.json';
-import Utils from '../system/Utils';
-
 import JoyStick from '../plugins/joystick.js';
 
 export class Boot extends Phaser.Scene { 

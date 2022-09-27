@@ -2,6 +2,7 @@
 {
     "assets": [
         { "xbot": "assets/meshes/xbot.fbx" },
+        { "swanky_velvet": "assets/meshes/swanky_velvet.fbx" },
         { "test_monkey": "assets/meshes/test_monkey.glb" },
         { "level": "assets/meshes/level.glb" }
     ]

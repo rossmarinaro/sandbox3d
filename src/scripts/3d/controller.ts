@@ -193,13 +193,13 @@ export class Controller {
   
     //// add first person controls
   
-        this.firstPersonControls = new FirstPersonControls(this.scene.third.camera, this.player.self.object, {});
+        this.firstPersonControls = new FirstPersonControls(this.scene.third.camera, this.player.self.obj, {});
         this.firstPersonControls.update(0, 0);
         this.firstPersonControls.offset = new THREE.Vector3(0, -4.5, 0);
 
     //// third person controls
   
-        //this.thirdPersonControls = new ThirdPersonControls(this.scene.third.camera, this.player.self.object, {offset: new THREE.Vector3(0, 1, 0), targetRadius: 3});
+        //this.thirdPersonControls = new ThirdPersonControls(this.scene.third.camera, this.player.self.obj, {offset: new THREE.Vector3(0, 1, 0), targetRadius: 3});
 
     //------------------------------------------------- on scene update
   

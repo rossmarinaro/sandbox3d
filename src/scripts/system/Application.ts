@@ -13,6 +13,7 @@ import { Camera } from './camera';
 import { Sandbox3D } from '../3d/sandbox';
 
 
+
 //------------------------------------ APP
 
 export default class Application {
@@ -29,7 +30,6 @@ export default class Application {
     public audio: AudioManager
     public cam: Camera
     public events: EventManager
-
 
     private input: types.input
     private scene: Phaser.Scene[]

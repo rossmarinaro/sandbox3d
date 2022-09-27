@@ -31,7 +31,7 @@ export class Player {
     public Actor: Actor | null
     public self = {
       skin: new ExtendedObject3D(),
-      object: new ExtendedObject3D() 
+      obj: new ExtendedObject3D() 
     }
 
     constructor(scene: Scene3D | any, isSelf?: boolean, data?: any)
@@ -63,17 +63,17 @@ export class Player {
 
 
 
-        this.scene.third.physics.add.existing(this.self.object, {shape: 'capsule', mass: 1.8, radius: 3, offset: { y: 5 }, height: 30});
-        this.self.object.body.setAngularFactor(0, 0, 0);
-        this.self.object.body.setFriction(0.1);
-        this.self.object.body.setGravity(0, -200, 0);
-        this.self.object.body.setPosition(150, 0, 50);
+        this.scene.third.physics.add.existing(this.self.obj, {shape: 'capsule', mass: 1.8, radius: 3, offset: { y: 5 }, height: 30});
+        this.self.obj.body.setAngularFactor(0, 0, 0);
+        this.self.obj.body.setFriction(0.1);
+        this.self.obj.body.setGravity(0, -200, 0);
+        this.self.obj.body.setPosition(150, 0, 50);
 
 
-        this.self.object.body.on.collision(async (otherObject, event) => {
+        this.self.obj.body.on.collision(async (otherObject, event) => {
 
           if (otherObject.name === 'ladder')
-            this.self.object.body.setVelocityY(100);
+            this.self.obj.body.setVelocityY(100);
      
 
 
@@ -114,7 +114,7 @@ export class Player {
 
       this.movement.x = THREE.MathUtils.lerp(this.movement.x,this.movement.x - 0.5, 0.2);
       this.movement.y = THREE.MathUtils.lerp(this.movement.y, this.movement.y - 1, 0.2);   
-      this.self.object.body.setAngularVelocityY(0);
+      this.self.obj.body.setAngularVelocityY(0);
 
 
     }
@@ -128,9 +128,9 @@ export class Player {
 
       this.setState(this.currentEquipped.key === 'rolling_pin1' ? 'idle' : 'Rifle Idle');
 
-      this.self.object.body.setVelocityX(0);
-      this.self.object.body.setVelocityZ(0);  
-      this.self.object.body.setAngularVelocityY(0);
+      this.self.obj.body.setVelocityX(0);
+      this.self.obj.body.setVelocityZ(0);  
+      this.self.obj.body.setAngularVelocityY(0);
         
      
     }
@@ -151,7 +151,7 @@ export class Player {
       
       System.app.audio.play('huh', 1, false, this.scene, 0); 
 
-      this.self.object.body.applyImpulse({x: 0, y: 150, z: 0}, {x: 0, y: -200, z: 0})
+      this.self.obj.body.applyImpulse({x: 0, y: 150, z: 0}, {x: 0, y: -200, z: 0})
 
     }
 
@@ -173,33 +173,33 @@ export class Player {
     //right
       if (forceX > 40) 
       {
-        this.self.object.body.setVelocityX(-z);
-        this.self.object.body.setVelocityZ(x);
+        this.self.obj.body.setVelocityX(-z);
+        this.self.obj.body.setVelocityZ(x);
       }
 
     //left
       else if (forceX < -40) 
       {  
-        this.self.object.body.setVelocityX(z);
-        this.self.object.body.setVelocityZ(-x);
+        this.self.obj.body.setVelocityX(z);
+        this.self.obj.body.setVelocityZ(-x);
       }
     //down
       else if (forceY < -40) 
       {
-        this.self.object.body.setVelocityX(x);
-        this.self.object.body.setVelocityZ(z);
+        this.self.obj.body.setVelocityX(x);
+        this.self.obj.body.setVelocityZ(z);
       }
     //up
       else if (forceY > 40) 
       {
-        this.self.object.body.setVelocityX(-x);
-        this.self.object.body.setVelocityZ(-z);
+        this.self.obj.body.setVelocityX(-x);
+        this.self.obj.body.setVelocityZ(-z);
       }
 
       this.setState(this.currentEquipped.key === 'rolling_pin1' ? 'run_no_gun' : 'Rifle Run');
 
-      if (this.self.object.body) 
-        this.self.object.body.setAngularVelocityY(0);
+      if (this.self.obj.body) 
+        this.self.obj.body.setAngularVelocityY(0);
 
     }
     
@@ -218,7 +218,7 @@ export class Player {
       v3 = new THREE.Vector3(),
       rotation = this.scene.third.camera.getWorldDirection(v3),
       theta = Math.atan2(rotation.x, rotation.z),
-      rotationMan = this.self.object.getWorldDirection(v3),
+      rotationMan = this.self.obj.getWorldDirection(v3),
       thetaMan = Math.atan2(rotationMan.x, rotationMan.z),
       l = Math.abs(theta - thetaMan);
     
@@ -228,8 +228,8 @@ export class Player {
 
       if (l > d && l > Math.PI - d || theta < thetaMan) 
         this.rotationSpeed *= -1; 
-      if (this.self.object.body) 
-        this.self.object.body.setAngularVelocityY(this.rotationSpeed); 
+      if (this.self.obj.body) 
+        this.self.obj.body.setAngularVelocityY(this.rotationSpeed); 
 
     }
 
@@ -317,7 +317,7 @@ export class Player {
         if (this.collide === true)
           this.canJump = true;
 
-        this.self.object.body.on.collision((otherObject, event) => {
+        this.self.obj.body.on.collision((otherObject, event) => {
 
           if (event !== 'end')
            this.collide = true;

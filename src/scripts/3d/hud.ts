@@ -1,6 +1,8 @@
 //------------------------------------------------- HUD
 
-import { ExtendedMesh, Scene3D, THREE } from '@enable3d/phaser-extension';
+import { Scene3D } from '@enable3d/phaser-extension';
+import { Utils } from '../system/Utils';
+
 
 export class HUD {
 
@@ -23,7 +25,7 @@ export class HUD {
     //------------- UI
 
 
-      //// text
+      // text banks
 
         this.textA = this.scene.add.text(50, 50, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
         this.textB = this.scene.add.text(50, 100, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
@@ -38,61 +40,44 @@ export class HUD {
         screen.orientation?.addEventListener('change', ()=> this.resizeWindow(this.scene), false);
         screen.orientation?.addEventListener('webkitfullscreenchange', ()=> this.resizeWindow(this.scene), false);
 
-
       //----------- on scene update
-  
+    
       this.scene.events.on('update', ()=> {
 
           if (!this.initialized)
             return;
 
-            this.scene.entities.filter((i: any) => {
+            this.scene.entities.filter((entity: any) => {
 
-              if (i.key === 'xbot' && i.obj !== null)
+              if (entity.key === 'xbot' && entity.obj !== null)
               {
 
-                const cam = this.scene.third.camera, 
-                      player = this.scene['player'],
-                      playerPos = this.scene['player'].self.object.position;
-
+                const 
+                    player = this.scene['player'],
+                    playerPosition = this.scene['player'].self.obj.position,
+                    botPosition = entity.obj.position,
+                    botRotation = entity.obj.rotation.y.toFixed(2).toString();
+                      
                 let direction: any = null,
-                    position = i.obj.position,
-                    rotation = i.obj.rotation.y.toFixed(2).toString(),
-                    vecA = new THREE.Vector3(playerPos.x, playerPos.y, playerPos.z),
-                    vecB = new THREE.Vector3(position.x, position.y, position.z), 
-        
-                    vecA_length = Math.sqrt(vecA.x * vecA.x + vecA.y * vecA.y + vecA.z * vecA.z), 
-                    vecB_length = Math.sqrt(vecB.x * vecB.x + vecB.y * vecB.y + vecB.z * vecB.z), 
-                
-                    inverse_length_vecA = 1 / vecA_length, 
-                    inverse_length_vecB = 1 / vecB_length, 
-                
-                    unit_vecA = new THREE.Vector3(vecA.x * inverse_length_vecA, vecA.y * inverse_length_vecA, vecA.z * inverse_length_vecA), 
-                    unit_vecB = new THREE.Vector3(vecB.x * inverse_length_vecB, vecB.y * inverse_length_vecB, vecB.z * inverse_length_vecB), 
-                
-                    dotProd = (unit_vecA.x * unit_vecB.x) + (unit_vecA.y * unit_vecB.y) + (unit_vecA.z * unit_vecB.z);
+                    dotProduct = Utils.getDotProduct(player.self, entity);
 
                 if (player.raycaster.ray)
-                  direction = cam.getWorldDirection(player.raycaster.ray.direction);
+                  direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
 
-                if (i.name === 'bot A')
+                if (entity.name === 'bot A')
                 {
-                  this.textA.setText(`your position: (x: ${playerPos.x.toFixed(2)}, y: ${playerPos.y.toFixed(2)}, z: ${playerPos.z.toFixed(2)})`);
-                  this.textB.setText(`bot A position: (x: ${position.x}, y: ${position.y}, z: ${position.z}), y-rotations: ${rotation}`);
-                  this.textC.setText(`dot product is: ${dotProd.toFixed(2)}`);
-                  this.textD.setText(`normalized direction: x: ${direction.normalize().x.toFixed(2)}, y: ${direction.normalize().y.toFixed(2)}, z: ${direction.normalize().z.toFixed(2)}`);
+                  this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
+                  this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
+                  this.textC.setText(`Bot-A Position: { X: ${botPosition.x}, Y: ${botPosition.y}, Z: ${botPosition.z} }, Y-Rotations: ${botRotation}`);
+                  this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
                 }   
-              
               }
-            
-            }); 
+          }); 
       });
-
     }
 
+  //------------------------------------ pop up notification
 
-
-    //------------------------------------
 
     public alert(message: string, optional?: string): void
     {
@@ -105,6 +90,7 @@ export class HUD {
     }
 
   //------------------------------------- resize
+  
 
     private resizeWindow(scene: Phaser.Scene | Scene3D): void 
     {
@@ -124,34 +110,3 @@ export class HUD {
 }
   
   
-
-
-/*
-
-
-let vecA = new THREE.Vector3(3, -5, 7),
-    vecB = new THREE.Vector3(5, -2, -9)
-
-    base = (vecA.x * vecB.x) + (vecA.y * vecB.y) + (vecA.z * vecB.z)) = 15 + 10 - 63 = -38
-
-let vecA_length = Math.sqrt(vecA.x * vecA.x + vecA.y * vecA.y + vecA.z * vecA.z) = Math.sqrt(9 + 25 + 49) = Math.sqrt(83) = 9.1100433
-    vecB_length = Math.sqrt(vecB. * vecB.x + vecB.y * vecB.y + vecB.z * vecB.z) = Math.sqrt(25 + 4 + 81) = Math.sqrt(110) = 10.488088
-
-    inverse_length_vecA = 1 / vecA_length = 0.1097642
-    inverse_length_vecB = 1 / vecB_length = 0.0953463
-
-let unit_vecA = (vecA.x * inverse_length_vecA, vecA.y * inverse_length_vecA, vecA.z * inverse_length_vecA) = (0.3292926, -0.548821, 0.7683494)
-    unit_vecB = (vecB.x * inverse_length_vecB, vecB.y * inverse_length_vecB, vecB.z * inverse_length_vecB) = (0.4767315, -01906926, -0.8581167)
-
-    dot prod = (unit_vecA.x * unit_vecB.x) + (unit_vecA.y * unit_vecB.y) + (unit_vecA.z * unit_vecB.z) = Math.floor().toFixed(2)
-
-public getDotProduct(vec: THREE.Vector3): number
-{
-  return (x * vec.x + y * vec.y + z * vec.z)
-}
-
-
-
-
-
-*/

@@ -4,13 +4,13 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 
 
-//------------------------------------------------------------------------- RIFLE
+//----------------- Actor FBX / GLB
 
 export class Actor extends ExtendedObject3D {
 
-    public static bones1: ExtendedMesh[] = []
-    public static bones2: ExtendedMesh[] = []
+
     public obj: ExtendedMesh | null
+    public _id: number | string | undefined
 
     private scene: Scene3D
     private key: string
@@ -20,7 +20,6 @@ export class Actor extends ExtendedObject3D {
     private _scale: number | undefined
     private rotationRate: number | undefined
     
-    public _id: number | string | undefined
 
     constructor(scene: Scene3D, key: string, type: string, name: string, x: number, y: number, z: number, scale?: number, rotationRate?: number)
     {
@@ -57,8 +56,6 @@ export class Actor extends ExtendedObject3D {
 
       this.scene.third.animationMixers.add(this.anims.mixer);  
 
-      this.anims.play('blink');
-
       this.scene.third.add.existing(this);
 
       sue = obj.scene.children; 
@@ -89,15 +86,6 @@ export class Actor extends ExtendedObject3D {
           sue[0].morphTargetInfluences[0] = 1;
           sue[0].morphTargetInfluences[1] = 1;
 
-  
-            // for (let bone1 in bones1)
-            // {
-            //   for (let bone2 in bones2)
-            //   {
-            //     console.log(bones1[bone1], bones2[bone2])
-            //   }
-            // }
-  
         });
     }
 
@@ -108,6 +96,11 @@ export class Actor extends ExtendedObject3D {
 
         this.add(obj); 
 
+        for (let i in obj.animations) 
+          this.anims.add(obj.animations[i].name, obj.animations[i]);
+
+        this.scene.third.animationMixers.add(this.anims.mixer); 
+      
         this.scene.third.add.existing(this);
 
         this.traverse((i: any) => {                                  
@@ -126,6 +119,7 @@ export class Actor extends ExtendedObject3D {
           });
 
           obj.position.set(this.x, this.y, this.z);
+          obj.rotation.set(0, 3, 0);
 
           if (this._scale)
             obj.scale.set(this._scale, this._scale, this._scale);
@@ -136,7 +130,6 @@ export class Actor extends ExtendedObject3D {
       
             });
             
-          obj.children[0].children.forEach((i: ExtendedMesh) => Actor.bones1.push(i));
   
       this.traverse((child: any) => {
   

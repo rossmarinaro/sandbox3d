@@ -88,8 +88,8 @@ export class Level extends ExtendedObject3D {
               }
             });
 
-            if (child.body !== null && child.body !== undefined)
-              this.scene.third.physics.destroy(child)
+           // if (child.body !== null && child.body !== undefined)
+             // this.scene.third.physics.destroy(child)
           }
 
           if (child.material)
