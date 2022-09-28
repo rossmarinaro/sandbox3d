@@ -96,18 +96,12 @@ export class Utils {
         { 
             bonesA?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => bones.push( { bone, worldPos: bone?.getWorldPosition(new THREE.Vector3()) } )));
 
-            let 
-                worldPos = bonesB?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => {
+            let worldPos = bonesB?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => {
                     if (bone.name === key)
                         return bone?.getWorldPosition(new THREE.Vector3());
-                })),
-
-                targetBoneB = {
-                    self: bonesB?.filter((bone: THREE.Object3D) => bone.name === key),
-                    worldPos: worldPos[0][0]
-                }
-
-            if (targetBoneB.worldPos)
+                }));
+                
+            if (worldPos[0][0])
             {
                 let arr: any[] = [],
                     getSum = (i: any) => { return i.x + i.y + i.z; };

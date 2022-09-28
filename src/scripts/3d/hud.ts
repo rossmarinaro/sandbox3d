@@ -49,16 +49,14 @@ export class HUD {
           if (!this.initialized)
             return;
 
-          if (this.scene['botA'].obj !== null)
-          {
+          const 
+            player = this.scene['player'],
+            playerPosition = this.scene['player'].self.obj.position,
+            botA = this.scene['botA'],
+            botB = this.scene['botB'];
 
-            const 
-                player = this.scene['player'],
-                playerPosition = this.scene['player'].self.obj.position,
-                botA = this.scene['botA'], 
-                botB = this.scene['botB'],
-                botPosition = botA.obj.position,
-                botRotation = botA.obj.rotation.y.toFixed(2).toString();
+          if (botA && botA.obj !== null)
+          {
                   
             let direction: any = null,
                 dotProduct = Utils.getDotProduct(player.self, botA);
@@ -82,7 +80,7 @@ export class HUD {
             
             this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
             this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
-            this.textC.setText(`Bot-A Position: { X: ${botPosition.x}, Y: ${botPosition.y}, Z: ${botPosition.z} }, Y-Rotations: ${botRotation}`);
+            this.textC.setText(`Bot-A Position: { X: ${botA.obj.position.x}, Y: ${botA.obj.position.y}, Z: ${botA.obj.position.z} }, Y-Rotations: ${botA.obj.rotation.y.toFixed(2).toString()}`);
             this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
             this.textE.setText(`Closest Bone (bot A to bot B): ${bone?.bone['name']}, { X: ${bonePos.x.toFixed(2)} Y: ${bonePos.y.toFixed(2)} Z: ${bonePos.z.toFixed(2)} }`);
             
