@@ -4,10 +4,10 @@ import { Canvas }  from "@enable3d/phaser-extension";
 
 export class Config {
 
-    private Canvas: any
-
-    public game: Phaser.Game
-    public app: Config | any
+    private Canvas: Readonly<typeof Canvas>
+    public self: Readonly<typeof Config>
+    public game: Readonly<Phaser.Game>
+    public app: any
     public proxyConnection: string | null
     public key: string
     public utils: any
@@ -46,19 +46,19 @@ export class Config {
     public orientation: orientation = {
 
         on: (event: string, callback: any, state: any) => {
-            if (typeof screen.orientation !== null && typeof screen.orientation !== 'undefined' && !this.mobileAndTabletCheck()) 
+            if (typeof screen.orientation !== null && typeof screen.orientation !== 'undefined' && !Config.mobileAndTabletCheck()) 
                 return screen.orientation.addEventListener(event, callback, state)
         },
         off: (event: string, callback: any, state: any)=>{
-            if (screen.orientation && !this.mobileAndTabletCheck()) 
+            if (screen.orientation && !Config.mobileAndTabletCheck()) 
                 return screen.orientation.removeEventListener(event, callback, state)
         },
         lock: (aspectRatio: OrientationLockType) => {
-            if (typeof screen.orientation.lock !== null && typeof screen.orientation !== 'undefined' && !this.mobileAndTabletCheck()) 
+            if (typeof screen.orientation.lock !== null && typeof screen.orientation !== 'undefined' && !Config.mobileAndTabletCheck()) 
                 return screen.orientation.lock(aspectRatio);
         },
         unlock: () => {
-            if (typeof screen.orientation.unlock !== null && typeof screen.orientation !== 'undefined' && !this.mobileAndTabletCheck()) 
+            if (typeof screen.orientation.unlock !== null && typeof screen.orientation !== 'undefined' && !Config.mobileAndTabletCheck()) 
                 return screen.orientation.unlock();
         }
     };
@@ -68,6 +68,7 @@ export class Config {
     {
 
         this.Canvas = canvas;
+        this.self = Config;
         this.app = null;
         this.proxyConnection = null; 
         this.key = '';
@@ -97,7 +98,7 @@ export class Config {
         this.setup.physics.matter.Body = Body; 
         this.setup.physics.matter.Bodies = Bodies;
 
-        if (this.mobileAndTabletCheck() )
+        if (Config.mobileAndTabletCheck() )
         {
             this.inputType = 'touch';
             this.mode = Phaser.Scale.RESIZE;
@@ -134,7 +135,7 @@ export class Config {
 
 
 
-    public mobileAndTabletCheck (): boolean
+    public static mobileAndTabletCheck (): boolean
     {
         let check = false;
         (function (a) {
@@ -148,15 +149,15 @@ export class Config {
 
 
 
-    public isDesktop(scene: Phaser.Scene): boolean
+    public static isDesktop(scene: Phaser.Scene): boolean
     {
-        return !System.mobileAndTabletCheck() && System.isLandscape(scene) || System.width > 540 ? true : false;
+        return !Config.mobileAndTabletCheck() && Config.isLandscape(scene) || System.width > 540 ? true : false;
     }
 
 //------------------------- is landscape
 
 
-    public isLandscape(scene: Phaser.Scene): boolean
+    public static isLandscape(scene: Phaser.Scene): boolean
     {
         return scene.scale.orientation.toString() === 'landscape-primary' || 
             scene.scale.orientation.toString() === 'landscape-secondary' || 
@@ -167,7 +168,7 @@ export class Config {
 //--------------------------- is portrait
 
 
-    public isPortrait(scene: Phaser.Scene): boolean
+    public static isPortrait(scene: Phaser.Scene): boolean
     {
         return scene.scale.orientation.toString() === 'portrait-primary' || 
             scene.scale.orientation.toString() === 'portrait-primary' || 
@@ -178,9 +179,9 @@ export class Config {
 //------------------------------- vibration api
 
 
-    public vibrate (duration: number): any
+    public static vibrate (duration: number): any
     {
-        navigator.vibrate = navigator.vibrate //|| navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+        navigator.vibrate = navigator.vibrate || navigator['webkitVibrate'] || navigator['mozVibrate'] || navigator['msVibrate'];
         const isSupported = navigator.vibrate;
         if (typeof isSupported) 
             return navigator.vibrate(duration);
@@ -188,7 +189,7 @@ export class Config {
 
 //---------------------------------- clear background 
 
-    public makeTransparantBackground(scene: Phaser.Scene): void
+    public static makeTransparantBackground(): void
     {
 
         let game = document.getElementById('game');

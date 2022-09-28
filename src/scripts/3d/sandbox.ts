@@ -36,7 +36,7 @@ export class Sandbox3D extends Scene3D {
 
 
       System.orientation.unlock();
-      System.makeTransparantBackground(scene);
+      System.self.makeTransparantBackground();
 
       this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 });
       //this.third.physics.debug?.enable();

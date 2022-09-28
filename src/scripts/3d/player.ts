@@ -301,7 +301,7 @@ export class Player {
   
         this.raycaster.setFromCamera({ 
           x: 0.6 - this.movement.x, 
-          y: System.isPortrait(this.scene) || System.isDesktop(this.scene) ? movementY(-0.8) : movementY(-0.5) 
+          y: System.self.isPortrait(this.scene) || System.self.isDesktop(this.scene) ? movementY(-0.8) : movementY(-0.5) 
         }, 
         this.scene.third.camera); 
   

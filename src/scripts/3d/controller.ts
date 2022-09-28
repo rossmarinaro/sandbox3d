@@ -62,7 +62,7 @@ export class Controller {
 
     private _init(): void
     {
-        if (System.mobileAndTabletCheck()) //virtual controls
+        if (System.self.mobileAndTabletCheck()) //virtual controls
         {
             const joystickPlugin = this.scene.plugins.get('rexvirtualjoystickplugin');
             
@@ -395,7 +395,7 @@ export class Controller {
 
       if (System.app.input.type === 'touch')
       {
-        if (System.isPortrait(scene)) 
+        if (System.self.isPortrait(scene)) 
         {
           this.buttonA?.setPosition(40, 500);
           this.buttonB?.setPosition(100, 550);
