@@ -14,8 +14,6 @@ import { Actor } from './Actor';
 export class Sandbox3D extends Scene3D {
 
     public score: number
-    public botA: Actor
-    public botB: Actor
 
     private _scene: Phaser.Scene
     private lighting: Lighting
