@@ -1,5 +1,5 @@
 
-import { ExtendedMesh, ExtendedObject3D, Scene3D } from '@enable3d/phaser-extension';
+import { THREE, ExtendedMesh, ExtendedObject3D, Scene3D } from '@enable3d/phaser-extension';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 
@@ -9,7 +9,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 export class Actor extends ExtendedObject3D {
 
 
-    public obj: ExtendedMesh | null
+    public obj: any
     public _id: number | string | undefined
 
     private scene: Scene3D
@@ -47,7 +47,6 @@ export class Actor extends ExtendedObject3D {
 
     private initGLB(obj: GLTF): void
     {
-      let sue: any;
 
       this.add(obj.scene); 
 
@@ -58,7 +57,7 @@ export class Actor extends ExtendedObject3D {
 
       this.scene.third.add.existing(this);
 
-      sue = obj.scene.children; 
+      this.obj = obj.scene.children; 
 
       this.traverse((i: any) => {                                  
 
@@ -81,10 +80,21 @@ export class Actor extends ExtendedObject3D {
         if (this._scale)
           this.scale.set(this._scale, this._scale, this._scale);
 
-        this.scene.time.delayedCall(3000, ()=> {
+        this.scene.time.delayedCall(1000, ()=> {
+      
+          this.scene.events.on('update', ()=> {
 
-          sue[0].morphTargetInfluences[0] = 1;
-          sue[0].morphTargetInfluences[1] = 1;
+            this.obj[0].morphTargetInfluences[0] += 0.01;
+            this.obj[0].morphTargetInfluences[1] += 0.01;
+
+            if (this.obj[0].morphTargetInfluences[0] >= 1)
+              this.obj[0].morphTargetInfluences[0] = 0;
+
+            if (this.obj[0].morphTargetInfluences[1] >= 1)
+              this.obj[0].morphTargetInfluences[1] = 0;
+
+
+          });
 
         });
     }

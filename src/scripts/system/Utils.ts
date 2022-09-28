@@ -6,7 +6,7 @@ import { Player } from '../3d/player';
 
 
 export class Utils {
-    
+
     public static strings = {
 
         joinWithUnderscore: function (a: string, b: string): string
@@ -69,15 +69,15 @@ export class Utils {
     //------------------------------------ get mesh vertex position
 
 
-    public getMeshVertexPosition(mesh: THREE.Object3D | any): THREE.Vector3
+    public static async getMeshVertexPosition(mesh: THREE.Object3D | any): Promise<THREE.Vector3 | null>
     {
+        if (!mesh.obj)
+            return null;
 
         let vertex = new THREE.Vector3(),
-            att = vertex.fromBufferAttribute(mesh.geometry.attributes.instanceStart, mesh.id); 
-            
-        console.log(mesh, vertex, att);
+           att = vertex.fromBufferAttribute(mesh.obj[0].geometry.morphAttributes.position[0], mesh.id); 
 
-        return vertex;
+        return null//vertex;
     }
 
     //------------------------------------ get nearest bone
@@ -117,11 +117,12 @@ export class Utils {
         return null;
     }
 
-    //------------------------------------
+
+    //------------------------------------ get dot product of two vector locations
+
 
     public static getDotProduct(actorA: Player | Actor, actorB: Player | Actor): number
     {
- 
         let posA = actorA['obj'].position,
             posB = actorB['obj'].position,
             vecA = new THREE.Vector3(posA.x, posA.y, posA.z),

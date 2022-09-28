@@ -68,22 +68,19 @@ export class Sandbox3D extends Scene3D {
       await this.level.load();
 
       this.player = new Player(this, true);
-      this.hud = new HUD(this, 'Sandbox3D');
+      this.hud = new HUD(this);
       this.controller = new Controller(this, this.player);
 
     //actors
 
-      this.botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1);
-      this.botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0);
-
-    //other objects
-
-    const monkey = new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25),
-          swankyVelvet = new Actor(this, 'swanky_velvet', 'fbx', 'swanky velvet', 50, -50, -50, 0.15, 0);
+      const botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1),
+            botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0),
+            monkey = new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25),
+            swankyVelvet = new Actor(this, 'swanky_velvet', 'fbx', 'swanky velvet', 50, -50, -50, 0.15, 0);
 
     //entities
 
-      this.entities = [this.player, this.botA, this.botB, monkey, swankyVelvet];
+      this.entities = [this.player, botA, botB, monkey, swankyVelvet];
 
     //delayed call, anims
 
@@ -94,11 +91,12 @@ export class Sandbox3D extends Scene3D {
         monkey.anims.play('blink');
         swankyVelvet.anims.play('Idle');
 
+
       });
 
     }
 
-    //-------------------------------------------
+    //------------------------------------------- main update
 
     public update(time: number): void
     {
@@ -106,9 +104,16 @@ export class Sandbox3D extends Scene3D {
       if (this.entities === [])
         return;
 
+    //update entities
+
       for (let entity in this.entities)
         if (typeof this.entities[entity].update === 'function')
           this.entities[entity].update(time);
+
+    //update HUD
+    
+      if (this.hud)
+      this.hud.update();
     }
 
 
