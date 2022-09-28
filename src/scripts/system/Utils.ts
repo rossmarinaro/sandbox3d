@@ -65,9 +65,9 @@ export class Utils {
         }
     }
 
-    //--------------------------------------------------- METHODS
 
-    //------------------------------------
+    //------------------------------------ get mesh vertex position
+
 
     public getMeshVertexPosition(mesh: THREE.Object3D | any): THREE.Vector3
     {
@@ -80,9 +80,10 @@ export class Utils {
         return vertex;
     }
 
-    //------------------------------------
+    //------------------------------------ get nearest bone
 
-    public static async getNearestBone(meshA: Actor, meshB: Actor, key: string): Promise<THREE.Object3D | boolean>
+
+    public static async getNearestBone(meshA: Actor, meshB: Actor, key: string): Promise<{bone: Object, pos: number} | null>
     {
 
         const 
@@ -108,46 +109,18 @@ export class Utils {
 
             if (targetBoneB.worldPos)
             {
-                let distArr: any[] = [],
-                    x = 0,
-                    y = 0,
-                    z = 0;
-
-                for (let [k, v] of Object.entries(bones))
-                {
-                    let vec = {
-                        x: v.worldPos.x - targetBoneB.worldPos.x,
-                        y: v.worldPos.y - targetBoneB.worldPos.y,
-                        z: v.worldPos.z - targetBoneB.worldPos.z
-                    };
-
-                    distArr.push(vec);
-                }
-
-                distArr.forEach(i => {
-                    x = x -= i.x; 
-                    y = y -= i.y;
-                    z = z -= i.z;
-                });
-                
-                let distance = new THREE.Vector3(x, y, z),
-                    sum = x + y + z,
-                    arr: any[] = [],
-
+                let arr: any[] = [],
                     getSum = (i: any) => { return i.x + i.y + i.z; };
 
                 bones.forEach((bone: THREE.Object3D) => arr.push({bone: bone['bone'], pos: getSum(bone['worldPos'])}));
 
-                let bone = arr.filter(i => Math.min(i.pos));
-                
-                console.log('distance: ', distance, '\nsum: ', sum, '\nbone: ', bone);   
+                let bone = arr.reduce((prev, curr) => prev.pos < curr.pos ? prev : curr);   
 
-
-
+                return bone;
             }
         }
 
-        return false;
+        return null;
     }
 
     //------------------------------------

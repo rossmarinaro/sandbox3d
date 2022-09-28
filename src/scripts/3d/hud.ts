@@ -1,6 +1,6 @@
 //------------------------------------------------- HUD
 
-import { Scene3D } from '@enable3d/phaser-extension';
+import { THREE, Scene3D } from '@enable3d/phaser-extension';
 import { Utils } from '../system/Utils';
 
 
@@ -12,6 +12,7 @@ export class HUD {
   private textB: Phaser.GameObjects.Text
   private textC: Phaser.GameObjects.Text
   private textD: Phaser.GameObjects.Text
+  private textE: Phaser.GameObjects.Text
 
     constructor(scene: Phaser.Scene, HUDType: string)
     {
@@ -27,10 +28,11 @@ export class HUD {
 
       // text banks
 
-        this.textA = this.scene.add.text(50, 50, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
-        this.textB = this.scene.add.text(50, 100, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
-        this.textC = this.scene.add.text(50, 150, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
-        this.textD = this.scene.add.text(50, 200, '', {fontSize: "20px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textA = this.scene.add.text(50, 50, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textB = this.scene.add.text(50, 100, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textC = this.scene.add.text(50, 150, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textD = this.scene.add.text(50, 200, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textE = this.scene.add.text(50, 250, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
 
         this.initialized = true;
 
@@ -42,37 +44,51 @@ export class HUD {
 
       //----------- on scene update
     
-      this.scene.events.on('update', ()=> {
+      this.scene.events.on('update', async ()=> {
 
           if (!this.initialized)
             return;
 
-            this.scene.entities.filter((entity: any) => {
+          if (this.scene['botA'].obj !== null)
+          {
 
-              if (entity.key === 'xbot' && entity.obj !== null)
-              {
+            const 
+                player = this.scene['player'],
+                playerPosition = this.scene['player'].self.obj.position,
+                botA = this.scene['botA'], 
+                botB = this.scene['botB'],
+                botPosition = botA.obj.position,
+                botRotation = botA.obj.rotation.y.toFixed(2).toString();
+                  
+            let direction: any = null,
+                dotProduct = Utils.getDotProduct(player.self, botA);
 
-                const 
-                    player = this.scene['player'],
-                    playerPosition = this.scene['player'].self.obj.position,
-                    botPosition = entity.obj.position,
-                    botRotation = entity.obj.rotation.y.toFixed(2).toString();
-                      
-                let direction: any = null,
-                    dotProduct = Utils.getDotProduct(player.self, entity);
+            if (player.raycaster.ray)
+              direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
+              
+            /* bones: 
+                mixamorigHips
+                mixamorigSpine
+                mixamorigLeftUpLeg
+                mixamorigRightUpLeg 
+            */
 
-                if (player.raycaster.ray)
-                  direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
+            const bone = await Utils.getNearestBone(botA, botB, 'mixamorigHips'),
 
-                if (entity.name === 'bot A')
-                {
-                  this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
-                  this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
-                  this.textC.setText(`Bot-A Position: { X: ${botPosition.x}, Y: ${botPosition.y}, Z: ${botPosition.z} }, Y-Rotations: ${botRotation}`);
-                  this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
-                }   
-              }
-          }); 
+                  bonePos = await bone?.bone['getWorldPosition'](new THREE.Vector3());
+                
+            if (!bonePos)
+              return;
+            
+            this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
+            this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
+            this.textC.setText(`Bot-A Position: { X: ${botPosition.x}, Y: ${botPosition.y}, Z: ${botPosition.z} }, Y-Rotations: ${botRotation}`);
+            this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
+            this.textE.setText(`Closest Bone (bot A to bot B): ${bone?.bone['name']}, { X: ${bonePos.x.toFixed(2)} Y: ${bonePos.y.toFixed(2)} Z: ${bonePos.z.toFixed(2)} }`);
+            
+          }
+ 
+
       });
     }
 

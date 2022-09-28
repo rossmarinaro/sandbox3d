@@ -1,19 +1,21 @@
 
 import { Scene3D } from '@enable3d/phaser-extension';
 import { System } from '../system/Config';
-import { Utils } from '../system/Utils';
+
 import { Lighting } from './lighting';
 import { Player } from '../3d/player';
 import { HUD } from '../3d/hud';
 import { Controller } from '../3d/controller';
 import { Level } from './level';
-import { Actor } from './Actor';import { THREE } from '@enable3d/phaser-extension';
+import { Actor } from './Actor';
 
 
 
 export class Sandbox3D extends Scene3D {
 
     public score: number
+    public botA: Actor
+    public botB: Actor
 
     private _scene: Phaser.Scene
     private lighting: Lighting
@@ -71,27 +73,21 @@ export class Sandbox3D extends Scene3D {
 
     //actors
 
+      this.botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1);
+      this.botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0);
+
+    //other objects
+
     const monkey = new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25),
-          botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1),
-          botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0),
           swankyVelvet = new Actor(this, 'swanky_velvet', 'fbx', 'swanky velvet', 50, -50, -50, 0.15, 0);
 
     //entities
 
-      this.entities = [this.player, botA, botB, monkey, swankyVelvet];
+      this.entities = [this.player, this.botA, this.botB, monkey, swankyVelvet];
 
-    //delayed call, get nearest bones
+    //delayed call, anims
 
-      this.time.delayedCall(1000, ()=> {
-
-         /* bones: 
-            mixamorigHips
-            mixamorigSpine
-            mixamorigLeftUpLeg
-            mixamorigRightUpLeg 
-        */
-
-        Utils.getNearestBone(botA, botB, 'mixamorigHips');
+      this.time.delayedCall(100, async ()=> {
 
       //play anims
 
