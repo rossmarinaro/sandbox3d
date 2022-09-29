@@ -62,7 +62,7 @@ export class HUD {
             dotProduct = Utils.getDotProduct(player.self, botA[0]);
 
         if (player.raycaster.ray)
-          direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
+            direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
           
         /* bones: 
             mixamorigHips
@@ -70,9 +70,9 @@ export class HUD {
             mixamorigLeftUpLeg
             mixamorigRightUpLeg 
         */
-
+           
         const bone = await Utils.getNearestBone(botA[0], botB[0], 'mixamorigHips'),
-              bonePos = await bone?.bone['getWorldPosition'](new THREE.Vector3());
+              bonePos = await bone?.bone['getWorldPosition'](new THREE.Vector3);
             
         if (!bonePos)
           return;

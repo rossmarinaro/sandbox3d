@@ -69,21 +69,22 @@ export class Utils {
     //------------------------------------ get mesh vertex position
 
 
-    public static async getMeshVertexPosition(mesh: THREE.Object3D | any): Promise<THREE.Vector3 | null>
+    public static async getMeshVertexPosition(mesh: THREE.Object3D | any): Promise<Readonly<THREE.Vector3> | null>
     {
         if (!mesh.obj)
             return null;
 
-        let vertex = new THREE.Vector3(),
+        let vertex = new THREE.Vector3,
            att = vertex.fromBufferAttribute(mesh.obj[0].geometry.morphAttributes.position[0], mesh.id); 
 
-        return null//vertex;
+        return null; //att;
     }
+
 
     //------------------------------------ get nearest bone
 
 
-    public static async getNearestBone(meshA: Actor, meshB: Actor, key: string): Promise<{bone: Object, pos: number} | null>
+    public static async getNearestBone(meshA: Actor, meshB: Actor, key: string): Promise<Readonly<{bone: Object, pos: number}> | null>
     {
 
         const 
@@ -94,11 +95,11 @@ export class Utils {
            
         if (bonesA && bonesB)
         { 
-            bonesA?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => bones.push( { bone, worldPos: bone?.getWorldPosition(new THREE.Vector3()) } )));
+            bonesA?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => bones.push( { bone, worldPos: bone?.getWorldPosition(new THREE.Vector3) } )));
 
             let worldPos = bonesB?.map((i: THREE.Object3D) => i.children.map((bone: THREE.Object3D) => {
                     if (bone.name === key)
-                        return bone?.getWorldPosition(new THREE.Vector3());
+                        return bone?.getWorldPosition(new THREE.Vector3);
                 }));
                 
             if (worldPos[0][0])

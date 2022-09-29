@@ -1,5 +1,5 @@
 
-import { Scene3D } from '@enable3d/phaser-extension';
+import { Scene3D ,THREE} from '@enable3d/phaser-extension';
 import { System } from '../system/Config';
 
 import { Lighting } from './lighting';
@@ -75,7 +75,7 @@ export class Sandbox3D extends Scene3D {
             botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0),
             monkey = new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25),
             swankyVelvet = new Actor(this, 'swanky_velvet', 'fbx', 'swanky velvet', 50, -50, -50, 0.15, 0);
-
+console.log(botA.getWorldDirection(new THREE.Vector3))
     //entities
 
       this.entities = [this.player, botA, botB, monkey, swankyVelvet];
