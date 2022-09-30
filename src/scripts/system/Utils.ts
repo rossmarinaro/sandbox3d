@@ -14,21 +14,12 @@ export class Utils {
             return a += `_${b}`;
         },
 
-        replaceUnderscore: function(str: any): string
+        modUnderscore: function(str: any, op: string): string
         {
             let strArr: string[] = [];
             for(let i = 0; i < str.length; i++)
                 strArr.push(str[i]);          
-            return strArr.includes('_') ? str.toString().replaceAll('_', ' ') : str;
-        },
-
-        removeUnderscore: function(str: any): string
-        {
-            let strArr: string[] = [];
-            for(let i = 0; i < str.length; i++)
-                strArr.push(str[i]);          
-            return strArr.includes('_') ? str.toString().replaceAll('_', '') : str;
-           
+            return strArr.includes('_') ? str.toString().replaceAll('_', op === 'replace' ?  ' ' : '') : str;
         },
 
         removeStringPart: async function(str: string, part: string): Promise<string>
