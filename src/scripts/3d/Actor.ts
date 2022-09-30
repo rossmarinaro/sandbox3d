@@ -140,19 +140,10 @@ export class Actor extends ExtendedObject3D {
       
             });
             
-  
-      this.traverse((child: any) => {
-  
-        if (child.isMesh)
-        {
-          child.castShadow = child.receiveShadow = true;
-          if (child.material)
-          {
-            child.material.metalness = 0.3;
-            child.material.roughness = 0.3;
-          }
-        }
-      });
 
     }
-}
+
+  }
+
+
+
