@@ -1,13 +1,13 @@
 
-import { Scene3D ,THREE} from '@enable3d/phaser-extension';
+import { Scene3D } from '@enable3d/phaser-extension';
 import { System } from '../system/Config';
 
 import { Lighting } from './lighting';
 import { Player } from '../3d/player';
 import { HUD } from '../3d/hud';
 import { Controller } from '../3d/controller';
-import { Level } from './level';
 import { Actor } from './Actor';
+import { LevelManager } from './LevelManager';
 
 
 
@@ -17,7 +17,6 @@ export class Sandbox3D extends Scene3D {
 
     private _scene: Phaser.Scene
     private lighting: Lighting
-    private level: Level
     private player: Player | null = null
     private hud: HUD
     private controller: Controller
@@ -59,11 +58,10 @@ export class Sandbox3D extends Scene3D {
       System.app.init(this, null);
 
       this.lighting = new Lighting(this, 185, 20, -185, -20, 1.6, 1.8);
-      this.level = new Level(this);
 
     //load map before objects
 
-      await this.level.load();
+      await LevelManager.load(this, 'level');
 
       this.player = new Player(this, true);
       this.hud = new HUD(this);
@@ -71,11 +69,11 @@ export class Sandbox3D extends Scene3D {
 
     //actors
 
-      const botA = new Actor(this, 'xbot', 'fbx', 'bot A', 120, -50, 100, 0.25, 0.1),
-            botB = new Actor(this, 'xbot', 'fbx', 'bot B', 120, -50, 50, 0.15, 0),
-            monkey = new Actor(this, 'test_monkey', 'glb', 'monkey', 100, -40, 100, 5.25),
-            swankyVelvet = new Actor(this, 'swanky_velvet', 'fbx', 'swanky velvet', 50, -50, -50, 0.15, 0);
-console.log(botA.getWorldDirection(new THREE.Vector3))
+      const botA = new Actor(this, true, 'xbot', 'bot A', 120, -50, 100, 0.25, 0.1),
+            botB = new Actor(this, true, 'xbot', 'bot B', 120, -50, 50, 0.15, 0),
+            monkey = new Actor(this, true, 'test_monkey', 'monkey', 100, -40, 100, 5.25),
+            swankyVelvet = new Actor(this, true, 'swanky_velvet', 'swanky velvet', 50, -50, -50, 0.15, 0);
+
     //entities
 
       this.entities = [this.player, botA, botB, monkey, swankyVelvet];
@@ -111,7 +109,7 @@ console.log(botA.getWorldDirection(new THREE.Vector3))
     //update HUD
     
       if (this.hud)
-      this.hud.update();
+        this.hud.update();
     }
 
 

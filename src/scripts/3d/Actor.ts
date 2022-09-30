@@ -1,6 +1,7 @@
 
-import { THREE, ExtendedMesh, ExtendedObject3D, Scene3D } from '@enable3d/phaser-extension';
+import { ExtendedObject3D, Scene3D } from '@enable3d/phaser-extension';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Utils } from '../system/Utils';
 
 
 
@@ -8,142 +9,159 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export class Actor extends ExtendedObject3D {
 
-
+    public asset_id: string
+    public key: string
     public obj: any
-    public _id: number | string | undefined
-
-    private scene: Scene3D
-    private key: string
+    public scene: Scene3D
+    public callback: Function | null | undefined
+    
     private x: number 
     private y: number 
     private z: number 
     private _scale: number | undefined
+
+    private static idIterator: number = 0
     private rotationRate: number | undefined
     
+    constructor (
 
-    constructor(scene: Scene3D, key: string, type: string, name: string, x: number, y: number, z: number, scale?: number, rotationRate?: number)
+      scene: Scene3D, 
+      render: boolean,
+      key: string, 
+      name: string, 
+      x: number, 
+      y: number, 
+      z: number, 
+      scale?: number, 
+      rotationRate?: number, 
+      callback?: Function
+    
+    )
     {
       super();
 
+      Actor.idIterator++;
+
       this.scene = scene;
+      this.callback = callback;
       this.key = key;
       this.name = name;
-      this.type = type;
       this._scale = scale;
       this.rotationRate = rotationRate;
       this.x = x;
       this.y = y;
       this.z = z;
-      this.obj = null;
+
+      if (render)
+        this.preload(); 
+      
+    }
+
+    //----------------------------------------
+
+    public async preload (): Promise<Readonly<void>>
+    {
+
+      this.type = await Utils.getFileType(this.scene, this.key);
+
+      this.asset_id = `${this.type + '_' + Actor.idIterator.toString()}`; 
 
       this.type === 'glb' ?
-        this.scene.third.load.gltf(this.key).then((obj: GLTF) => this.initGLB(obj)) :
-        this.scene.third.load.fbx(this.key).then((obj: any) => this.initFBX(obj));
 
-    
+        await this.scene.third.load.gltf(this.key).then(async (obj: GLTF) => {
+          this.morphTargetInfluences = obj['morphTargetInfluences'];
+          this.obj = obj.scene.children; 
+          this.add(obj.scene); 
+        }) :
+        await this.scene.third.load.fbx(this.key).then(async (obj: any) => {
+          this.obj = obj;
+          this.add(obj); 
+        });
+
+      this.load();
     }
 
-    //---------------------------------- glb
 
-    private initGLB(obj: GLTF): void
+    //---------------------------------- 
+
+    public async load(): Promise<Readonly<void>>
     {
 
-      this.add(obj.scene); 
+      for (let i in this.obj.animations) 
+        this.anims.add(this.obj.animations[i].name, this.obj.animations[i]);
 
-      for (let i in obj.animations) 
-        this.anims.add(obj.animations[i].name, obj.animations[i]);
-
-      this.scene.third.animationMixers.add(this.anims.mixer);  
-
+      this.scene.third.animationMixers.add(this.anims.mixer); 
+  
       this.scene.third.add.existing(this);
 
-      this.obj = obj.scene.children; 
+      this.traverse((child: any) => {
 
-      this.traverse((i: any) => {                                  
-
-        if (i.isMesh)
-        {                                                                
-    
-          i.castShadow = i.receiveShadow = true;
-
-          if (i.material)
+        if (child.isMesh)
+        {
+          child.castShadow = child.receiveShadow = true;
+          if (child.material)
           {
-            i.material.metalness = 0.3;
-            i.material.roughness = 0.3;
+            child.material.metalness = 0.3;
+            child.material.roughness = 0.3;
           }
         }
-        });
+        
+      });
 
+      this.init();
 
-        this.position.set(this.x, this.y, this.z);
+      if (this['callback'])
+        this['callback']();
 
-        if (this._scale)
-          this.scale.set(this._scale, this._scale, this._scale);
-
-        this.scene.time.delayedCall(1000, ()=> {
-      
-          this.scene.events.on('update', ()=> {
-
-            this.obj[0].morphTargetInfluences[0] += 0.01;
-            this.obj[0].morphTargetInfluences[1] += 0.01;
-
-            if (this.obj[0].morphTargetInfluences[0] >= 1)
-              this.obj[0].morphTargetInfluences[0] = 0;
-
-            if (this.obj[0].morphTargetInfluences[1] >= 1)
-              this.obj[0].morphTargetInfluences[1] = 0;
-
-
-          });
-
-        });
     }
 
-    //------------------------------------------ fbx
+    //-------------------------------------------
 
-    private initFBX(obj: any): void
+    private init (): void
     {
-
-        this.add(obj); 
-
-        for (let i in obj.animations) 
-          this.anims.add(obj.animations[i].name, obj.animations[i]);
-
-        this.scene.third.animationMixers.add(this.anims.mixer); 
       
-        this.scene.third.add.existing(this);
+      switch (this.type)
+      {
+        //------------------- glb
 
-        this.traverse((i: any) => {                                  
-  
-          if (i.isMesh)
-          {                                                                
-      
-            i.castShadow = i.receiveShadow = true;
+        case 'glb':
 
-            if (i.material)
-            {
-              i.material.metalness = 0.3;
-              i.material.roughness = 0.3;
-            }
-          }
-          });
-
-          obj.position.set(this.x, this.y, this.z);
-          obj.rotation.set(0, 3, 0);
+          this.position.set(this.x, this.y, this.z);
 
           if (this._scale)
-            obj.scale.set(this._scale, this._scale, this._scale);
+            this.scale.set(this._scale, this._scale, this._scale);
+          
+              this.scene.events.on('update', ()=> {
 
-            this.scene.events.on('update', ()=> {
-              obj.rotation.y += this.rotationRate;
-              this.obj = obj;
-      
-            });
-            
+                if (!this.morphTargetInfluences) 
+                  return;
 
+                this.morphTargetInfluences[0] += 0.01;
+                this.morphTargetInfluences[1] += 0.01;
+
+                if (this.morphTargetInfluences[0] >= 1)
+                  this.morphTargetInfluences[0] = 0;
+
+                if (this.morphTargetInfluences[1] >= 1)
+                  this.morphTargetInfluences[1] = 0;
+              });
+
+        break;
+
+        //----------------------- fbx
+
+        case 'fbx': 
+
+          this.obj.position.set(this.x, this.y, this.z);
+          this.obj.rotation.set(0, 3, 0);
+
+          if (this._scale)
+            this.obj.scale.set(this._scale, this._scale, this._scale);
+
+          this.scene.events.on('update', ()=> this.obj.rotation.y += this.rotationRate);
+
+        break;
+      }
     }
 
-  }
-
-
-
+}

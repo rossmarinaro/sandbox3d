@@ -8,10 +8,9 @@ export class EventManager {
 
     public manager: any
     public socket: any
-    public ee: any
+    public ee: Phaser.Events.EventEmitter | null
     
     private scene: Phaser.Scene
-    private events: Phaser.Events.EventEmitter
 
     constructor()
     {
@@ -72,12 +71,9 @@ export class EventManager {
     {
 
         this.scene = scene;
-        this.events = scene.events;
+        System.app.events.ee = scene.events;
 
-        System.app.events.ee = this.events;
-
-
-        this.events
+        System.app.events.ee
         
         .on('exit', async ()=> {  //// exit main game
 

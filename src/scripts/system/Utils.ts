@@ -1,6 +1,6 @@
 /* COMMON UTILS */
 
-import { THREE } from '@enable3d/phaser-extension';
+import { Scene3D, THREE } from '@enable3d/phaser-extension';
 import { Actor } from '../3d/Actor';
 import { Player } from '../3d/player';
 
@@ -63,6 +63,18 @@ export class Utils {
         {  
             return str.includes(' ') ? str.replace(' ', '') : str;
         }
+    }
+
+    //------------------------------------------ get file type
+
+    public static async getFileType(scene: Scene3D, key: string): Promise<Readonly<string>>
+    {
+        const cache = scene.cache.json.get('resources_3d'),
+              obj = cache.assets.filter((asset: any) => Object.keys(asset).toString() === key),
+              file: Object = Object.entries(obj[0]),
+              extension = file[0][1].endsWith('glb') ? 'glb' : 'fbx';
+
+        return extension;
     }
 
 
