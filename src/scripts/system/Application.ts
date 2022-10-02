@@ -12,6 +12,9 @@ import { Preload } from '../preload/Preload';
 import { Camera } from './camera';
 import { Sandbox3D } from '../3d/sandbox';
 
+import { Player } from '../3d/player';
+import { Actor } from '../3d/Actor';
+
 
 
 //------------------------------------ APP
@@ -21,15 +24,16 @@ export default class Application {
     public timeOfDay: number
     public timeWarp: number 
     public gameData: any
+    sys3d: any
     public groups?: any
     public scale: any
     public pipeline: any[]
     public groundArray: any[]
     public gameState: boolean = false
 
-    public audio: AudioManager
-    public cam: Camera
-    public events: EventManager
+    public audio: typeof AudioManager = AudioManager
+    public cam: typeof Camera = Camera
+    public events: typeof EventManager = EventManager
 
     private input: types.input
     private scene: Phaser.Scene[]
@@ -49,12 +53,10 @@ export default class Application {
     constructor(system: Config)
     {  
 
-        this.audio = new AudioManager;
-        this.cam = new Camera;
-        this.events = new EventManager;
         this.type = Phaser.WEBGL;
         this.transparent = true,
         this.parent = 'game';
+
         this.scale = {
             mode: system.mode,
             autoCenter: system.position,
@@ -72,20 +74,28 @@ export default class Application {
             parentBottom: null, 
             sizerBottom: null
         };
+
         this.dom = {
             createContainer: true,
             //modal: null
         };
+
         this.input = {
             virtual: true,
             gamepad: true,
             type: system.inputType,
             mode: 'A'
         };
+
         this.physics = {
             default: 'arcade'
         };
         
+        this.sys3d = {
+            player: Player,
+            actor: Actor
+        };
+
 
     //--------------------array of stages / minigames within the game
 
@@ -105,7 +115,7 @@ export default class Application {
   
     public async init(scene: Phaser.Scene): Promise<void>    
     { 
-
+        
     ////time of day
 
         this.date = new Date();
@@ -116,7 +126,7 @@ export default class Application {
 
     ////events / map, level
 
-        System.app.events.init(scene);
+        this.events.init(scene);
     
 
     }

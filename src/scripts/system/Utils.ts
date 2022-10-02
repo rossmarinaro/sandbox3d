@@ -1,8 +1,7 @@
 /* COMMON UTILS */
 
 import { Scene3D, THREE } from '@enable3d/phaser-extension';
-import { Actor } from '../3d/Actor';
-import { Player } from '../3d/player';
+import { System } from './Config';
 
 
 export class Utils {
@@ -20,6 +19,11 @@ export class Utils {
             for(let i = 0; i < str.length; i++)
                 strArr.push(str[i]);          
             return strArr.includes('_') ? str.toString().replaceAll('_', op === 'replace' ?  ' ' : '') : str;
+        },
+
+        checkSpace: async function(str: string): Promise<string>
+        {  
+            return str.includes(' ') ? str.replace(' ', '') : str;
         },
 
         removeStringPart: async function(str: string, part: string): Promise<string>
@@ -48,12 +52,9 @@ export class Utils {
 
             return newStr;
      
-        },
-
-        checkSpace: async function(str: string)
-        {  
-            return str.includes(' ') ? str.replace(' ', '') : str;
         }
+
+        
     }
 
     //------------------------------------------ get file type
@@ -87,7 +88,13 @@ export class Utils {
     //------------------------------------ get nearest bone
 
 
-    public static async getNearestBone(meshA: Actor, meshB: Actor, key: string): Promise<Readonly<{bone: Object, pos: number}> | null>
+    public static async getNearestBone (
+
+        meshA: typeof System.app.sys3d.actor, 
+        meshB: typeof System.app.sys3d.actor, 
+        key: string
+
+    ): Promise<Readonly<{bone: Object, pos: number}> | null>
     {
 
         const 
@@ -125,7 +132,12 @@ export class Utils {
     //------------------------------------ get dot product of two vector locations
 
 
-    public static getDotProduct(actorA: Player | Actor, actorB: Player | Actor): number
+    public static getDotProduct(
+
+        actorA: typeof System.app.sys3d.player | typeof System.app.sys3d.actor, 
+        actorB: typeof System.app.sys3d.player | typeof System.app.sys3d.actor
+
+    ): number
     {
         let posA = actorA['obj'].position,
             posB = actorB['obj'].position,

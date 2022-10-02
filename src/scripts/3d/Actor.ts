@@ -108,10 +108,12 @@ export class Actor extends ExtendedObject3D {
         
       });
 
+    //init / trigger callback if defined
+
       this.init();
 
-      if (this['callback'])
-        this['callback']();
+      if (this.callback)
+        this.callback();
 
     }
 

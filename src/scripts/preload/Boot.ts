@@ -29,8 +29,10 @@ export class Boot extends Phaser.Scene {
         System.app.scale.scaleWidth = this.scale.width; 
         System.app.scale.scaleHeight = this.scale.height;
         System.app.scale.scaleRatio = System.app.scale.scaleWidth / System.app.scale.scaleHeight * 0.9; 
+
             
     }
+    
     private async preload(): Promise<void>
     {
         //// assets

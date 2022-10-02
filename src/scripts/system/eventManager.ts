@@ -6,31 +6,24 @@ import { Scene3D } from '@enable3d/phaser-extension';
 
 export class EventManager {
 
-    public manager: any
-    public socket: any
-    public ee: Phaser.Events.EventEmitter | null
+    public static ee: Phaser.Events.EventEmitter | null = null
+    public static socket: any = null
+    private static scene: Phaser.Scene
     
-    private scene: Phaser.Scene
 
-    constructor()
-    {
-        this.manager = null;
-        this.socket = null;
-        this.ee = null;
-    }
-
-    private stopCommon(): void
+    private static stopCommon(): void
     {
         
-        this.scene.sound.stopAll(); 
-        this.scene.sound.removeAll(); 
+        EventManager.scene.sound.stopAll(); 
+        EventManager.scene.sound.removeAll(); 
     
         /* .. */
         
     }
 
+    //--------------------------------
 
-    public quitGame(scene: Phaser.Scene | Scene3D): void
+    public static quitGame(scene: Phaser.Scene | Scene3D): void
     {
         if (System.app.events.socket !== null)
             System.app.events.socketClose(scene['connection']);
@@ -39,7 +32,9 @@ export class EventManager {
         System.app.events.ee.emit('exit');
     }
 
-    public async socketInit(): Promise<boolean>
+    //--------------------------------
+
+    public static async socketInit(): Promise<boolean>
     {
         if (System.app.events.socket !== null)
             return true;
@@ -53,13 +48,17 @@ export class EventManager {
         return false;
     }
 
-    public socketClose(socket: any): void
+    //--------------------------------
+
+    public static socketClose(socket: any): void
     {
         socket.disconnect();  
         System.app.events.socket = null;
     }
 
-    public socketErrorHandler (err: any): boolean
+    //--------------------------------
+
+    public static socketErrorHandler (err: any): boolean
     {
         console.log('socket error: ', err);
         System.app.ui.displayMessage(`OOF! NETWORK ERROR: ${err}`, true, true);
@@ -67,20 +66,22 @@ export class EventManager {
         return false;
     }
 
-    public init (scene: Phaser.Scene): void
+    //--------------------------------
+
+    public static init (scene: Phaser.Scene): void
     {
 
-        this.scene = scene;
+        EventManager.scene = scene;
         System.app.events.ee = scene.events;
 
         System.app.events.ee
         
         .on('exit', async ()=> {  //// exit main game
 
-            this.stopCommon();
+            EventManager.stopCommon();
 
 
-            this.scene.scene.stop('Menu3D');
+            EventManager.scene.scene.stop('Menu3D');
         });
 
     }

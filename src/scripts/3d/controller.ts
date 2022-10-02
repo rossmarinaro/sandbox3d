@@ -225,26 +225,10 @@ export class Controller {
               this.dumpGameControllerState(); 
           }
   
-            this.zoom ? 
-              this.zoomWeapon() : 
-              this.player.defaultStance(
-                time, 
-                this.joystick1, 
-                this.keys, 
-                this.leftStick
-              );
-
-            if (this.crouching)
-                this.player.crouch();
-
-            if (this.jump)
-              this.player.jump();
+          if (this.jump)
+            this.player.jump();
   
-            if (this.shoot)
-              this.attack(time);
-  
-            if (this.shoot === false)
-                System.app.audio.stop('automac1000_shot', this.scene);
+
         });
     }
   
@@ -252,7 +236,7 @@ export class Controller {
 
     private openMenu (): void 
     {
-      System.app.audio.play('bloop1', 1, false, this.scene, 0);           
+     
 
     }
 
@@ -280,10 +264,7 @@ export class Controller {
 
     private zoomWeapon(): void
     {
-      //this.crossHairs.alpha = 0
-      this.player.movement.x = THREE.MathUtils.lerp(this.player.movement.x, 0.6, 0.2);
-      this.player.movement.y = THREE.MathUtils.lerp(this.player.movement.y, -0.8 + 1.8, 0.2);
-      this.player.movement.z = THREE.MathUtils.lerp(this.player.movement.z, -0.45, 0.2);
+
     }
   
   //------------------------------------------- attack
@@ -291,18 +272,7 @@ export class Controller {
     private attack(time: number): void
     {
 
-      let playerWeapon = this.player['currentEquipped']; 
-
-      // if (typeof playerWeapon.obj.recoil === 'function' && playerWeapon.quantity >= 1)
-      //   playerWeapon.obj.recoil(time);
-
-      if (this.isFiring === true)
-        return;
-
-      this.isFiring = true;
-      this.scene.time.delayedCall(250, ()=> this.isFiring = false);
-
-      this.player.attack();
+     
 
     }
   

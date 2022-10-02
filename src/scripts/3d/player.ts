@@ -3,7 +3,6 @@ import { THREE, ExtendedObject3D, Scene3D, FirstPersonControls } from '@enable3d
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { System } from '../system/Config';
 
-import { Actor } from './Actor';
 
 
 //------------------------------------------------- player
@@ -28,7 +27,7 @@ export class Player {
     public rotationSpeed: number
     public health: number
     public hitbox: any
-    public Actor: Actor | null
+    public Actor: typeof System.app.sys3d.actor | null
     public self = {
       skin: new ExtendedObject3D(),
       obj: new ExtendedObject3D() 
