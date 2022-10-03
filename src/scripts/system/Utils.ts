@@ -97,6 +97,13 @@ export class Utils {
     ): Promise<Readonly<{bone: Object, pos: number}> | null>
     {
 
+        /* possible bone keys: 
+            mixamorigHips
+            mixamorigSpine
+            mixamorigLeftUpLeg
+            mixamorigRightUpLeg 
+        */
+
         const 
 
            bonesA = meshA.obj?.children.filter((i: THREE.Object3D) => i instanceof THREE.Bone),

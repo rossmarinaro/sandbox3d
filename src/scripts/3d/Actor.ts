@@ -111,6 +111,9 @@ export class Actor extends ExtendedObject3D {
       if (this._scale)
         this.scale.set(this._scale, this._scale, this._scale);
 
+      if (this.rotationRate)
+        this.rotation.set(0, this.rotationRate, 0);
+
     //init / trigger callback if defined
 
       this.init();
@@ -156,11 +159,10 @@ export class Actor extends ExtendedObject3D {
           
       
           this.position.set(this.x, this.y, this.z);
-          this.rotation.set(0, 6, 0);
 
           this.scene.events.on('update', ()=> {
-            if (this.rotationRate)
-              this.rotation.y += this.rotationRate;
+           if (this.name === 'bot A' && this.rotationRate)
+              this.rotateY(this.rotationRate);
           });
 
         break;

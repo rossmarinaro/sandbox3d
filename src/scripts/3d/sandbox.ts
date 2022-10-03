@@ -70,8 +70,8 @@ export class Sandbox3D extends Scene3D {
 
       const botA = new System.app.sys3d.actor(this, true, 'xbot', 'bot A', 120, -50, 100, 0.25, 0.1),
             botB = new System.app.sys3d.actor(this, true, 'xbot', 'bot B', 120, -50, 50, 0.15, 0),
-            monkey = new System.app.sys3d.actor(this, true, 'test_monkey', 'monkey', 100, -40, 100, 5.25),
-            swankyVelvet = new System.app.sys3d.actor(this, true, 'swanky_velvet', 'swanky velvet', 50, -50, -50, 0.15, 0);
+            monkey = new System.app.sys3d.actor(this, true, 'test_monkey', 'monkey', 100, -40, 100, 5, 0),
+            swankyVelvet = new System.app.sys3d.actor(this, true, 'swanky_velvet', 'swanky velvet', 50, -50, -50, 0.15, 3);
 
     //entities
 

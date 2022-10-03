@@ -16,7 +16,7 @@ export class Player {
     private equipped: any
     private canJump: boolean
 
-    public raycaster: THREE.Raycaster
+    public raycaster: THREE.Raycaster | null = null
     public id: string | undefined
     public data: any
     public username: string | null

@@ -13,6 +13,7 @@ export class HUD {
   private textD: Phaser.GameObjects.Text
   private textE: Phaser.GameObjects.Text
   private textF: Phaser.GameObjects.Text
+  private textG: Phaser.GameObjects.Text
 
     constructor(scene: Phaser.Scene)
     {
@@ -34,6 +35,7 @@ export class HUD {
         this.textD = this.scene.add.text(50, 200, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
         this.textE = this.scene.add.text(50, 250, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
         this.textF = this.scene.add.text(50, 300, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
+        this.textG = this.scene.add.text(50, 350, '', {fontSize: "15px", fontFamily: "Digitizer"}).setColor("#ffff00").setStroke('#000000', 4).setShadow(2, 2, '#000000', 1, false);
 
       //listen for resize
 
@@ -58,19 +60,10 @@ export class HUD {
       if (botA[0].obj)
       {
 
-        let direction: any = null,
-            dotProduct = Utils.getDotProduct(player.self.obj, botA[0]); 
-
-        if (player.raycaster.ray)
-            direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
+        let direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction),
+            dotProduct = Utils.getDotProduct(player.self.obj, botA[0]),
+            areFacing = direction.normalize().x.toFixed() === botA[0].rotation.y.toFixed();
           
-        /* bones: 
-            mixamorigHips
-            mixamorigSpine
-            mixamorigLeftUpLeg
-            mixamorigRightUpLeg 
-        */
-           
         const bone = await Utils.getNearestBone(botA[0], botB[0], 'mixamorigHips'),
               bonePos = await bone?.bone['getWorldPosition'](new THREE.Vector3);
             
@@ -79,10 +72,11 @@ export class HUD {
   
         this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
         this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
-        this.textC.setText(`Bot-A Position: { X: ${botA[0].obj.position.x}, Y: ${botA[0].obj.position.y}, Z: ${botA[0].obj.position.z} }, Y-Rotations: ${botA[0].rotation.y.toFixed(2)}`);
+        this.textC.setText(`Bot-A Position: { X: ${botA[0].obj.position.x}, Y: ${botA[0].obj.position.y}, Z: ${botA[0].obj.position.z} }, Y-Rotation: ${botA[0].rotation.y.toFixed(2)}`);
         this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
         this.textE.setText(`Closest Bone (bot A to bot B): ${bone?.bone['name']}, { X: ${bonePos.x.toFixed(2)} Y: ${bonePos.y.toFixed(2)} Z: ${bonePos.z.toFixed(2)} }`);
-        this.textF.setText(`Monkey Brow Vertex-Position: ${ await Utils.getMeshVertexPosition(monkey[0]) }`);
+        this.textF.setText(`bot A and player facing?: ${areFacing}`);
+        this.textG.setText(`Monkey Brow Vertex-Position: ${ await Utils.getMeshVertexPosition(monkey[0]) }`);
       }
 
   }
