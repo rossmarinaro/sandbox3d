@@ -52,15 +52,14 @@ export class HUD {
         player = this.scene['player'],
         playerPosition = this.scene['player'].self.obj.position,
         botA = this.scene.entities.filter((i: ExtendedObject3D) => i.name === 'bot A'),
-        botB = this.scene.entities.filter((i: ExtendedObject3D) => i.name === 'bot B'),
+        botB = this.scene.entities.filter((i: ExtendedObject3D) => i.name === 'bot B'), 
         monkey = this.scene.entities.filter((i: ExtendedObject3D) => i.name === 'monkey');
 
       if (botA[0].obj)
       {
-       
 
         let direction: any = null,
-            dotProduct = Utils.getDotProduct(player.self, botA[0]); 
+            dotProduct = Utils.getDotProduct(player.self.obj, botA[0]); 
 
         if (player.raycaster.ray)
             direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
@@ -77,11 +76,10 @@ export class HUD {
             
         if (!bonePos)
           return;
-
-          
+  
         this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
         this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);
-        this.textC.setText(`Bot-A Position: { X: ${botA[0].obj.position.x}, Y: ${botA[0].obj.position.y}, Z: ${botA[0].obj.position.z} }, Y-Rotations: ${botA[0].obj.rotation.y.toFixed(2).toString()}`);
+        this.textC.setText(`Bot-A Position: { X: ${botA[0].obj.position.x}, Y: ${botA[0].obj.position.y}, Z: ${botA[0].obj.position.z} }, Y-Rotations: ${botA[0].rotation.y.toFixed(2)}`);
         this.textD.setText(`Dot Product (player, bot-A): ${dotProduct.toFixed(2)}`);
         this.textE.setText(`Closest Bone (bot A to bot B): ${bone?.bone['name']}, { X: ${bonePos.x.toFixed(2)} Y: ${bonePos.y.toFixed(2)} Z: ${bonePos.z.toFixed(2)} }`);
         this.textF.setText(`Monkey Brow Vertex-Position: ${ await Utils.getMeshVertexPosition(monkey[0]) }`);

@@ -210,7 +210,7 @@ export class Player {
       if (l > d && l > Math.PI - d || theta < thetaMan) 
         this.rotationSpeed *= -1; 
       if (this.self.obj.body) 
-        this.self.obj.body.setAngularVelocityY(this.rotationSpeed); 
+        this.self.obj.body.setAngularVelocityY(this.rotationSpeed);  
 
     }
 

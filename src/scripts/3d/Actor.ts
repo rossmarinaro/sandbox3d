@@ -108,6 +108,9 @@ export class Actor extends ExtendedObject3D {
         
       });
 
+      if (this._scale)
+        this.scale.set(this._scale, this._scale, this._scale);
+
     //init / trigger callback if defined
 
       this.init();
@@ -129,9 +132,6 @@ export class Actor extends ExtendedObject3D {
         case 'glb':
 
           this.position.set(this.x, this.y, this.z);
-
-          if (this._scale)
-            this.scale.set(this._scale, this._scale, this._scale);
           
               this.scene.events.on('update', ()=> {
 
@@ -153,14 +153,15 @@ export class Actor extends ExtendedObject3D {
         //----------------------- fbx
 
         case 'fbx': 
+          
+      
+          this.position.set(this.x, this.y, this.z);
+          this.rotation.set(0, 6, 0);
 
-          this.obj.position.set(this.x, this.y, this.z);
-          this.obj.rotation.set(0, 3, 0);
-
-          if (this._scale)
-            this.obj.scale.set(this._scale, this._scale, this._scale);
-
-          this.scene.events.on('update', ()=> this.obj.rotation.y += this.rotationRate);
+          this.scene.events.on('update', ()=> {
+            if (this.rotationRate)
+              this.rotation.y += this.rotationRate;
+          });
 
         break;
       }

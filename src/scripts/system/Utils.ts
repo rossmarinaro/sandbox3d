@@ -139,8 +139,8 @@ export class Utils {
 
     ): Readonly<number>
     {
-        let posA = actorA['obj'].position,
-            posB = actorB['obj'].position,
+        let posA = actorA.position,
+            posB = actorB.position,
             
             vecA = new THREE.Vector3(posA.x, posA.y, posA.z),
             vecB = new THREE.Vector3(posB.x, posB.y, posB.z), 
