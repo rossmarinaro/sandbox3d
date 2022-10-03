@@ -115,7 +115,7 @@ export class Controller {
                 .on('pointerout', ()=> this.jump = false);
             this.buttonF = this.scene.add.circle(this.scene.scale.width - 150, 590, 20, 0x000000).setAlpha(0.5)
                 .setInteractive()
-                .on('pointerdown', this.openChatWindow); 
+                .on('pointerdown', ()=>{}); 
 
           //listen for resize
 
@@ -136,12 +136,6 @@ export class Controller {
               space: this.scene.input.keyboard.addKey('space'),
               tab: this.scene.input.keyboard.addKey('tab')
             }
-
-        //trigger inventory menu
-            
-          this.scene.input.keyboard.on('keydown-TAB', this.openChatWindow);
-
-        //open chat window
 
           this.scene.input.keyboard.on('keydown-SHIFT', this.openMenu);
 
@@ -167,9 +161,6 @@ export class Controller {
 
           if (button.index === 9) //start
             this.openMenu();
-
-          if (button.index === 8) //select
-            this.openChatWindow();
 
           if (pad.A || pad.R1 || pad.R2) 
             this.shoot = true;
@@ -240,13 +231,6 @@ export class Controller {
 
     }
 
-  //------------------------------ chat
-
-    private openChatWindow (): void
-    {
-      this.scene.input.mouse.releasePointerLock();
-
-    }
 
   //-------------------------------- trigger movement
 
@@ -260,21 +244,6 @@ export class Controller {
       this.player.look(moveX, moveY, this.firstPersonControls);
     }
   
-  //---------------------------------------- zoom
-
-    private zoomWeapon(): void
-    {
-
-    }
-  
-  //------------------------------------------- attack
-  
-    private attack(time: number): void
-    {
-
-     
-
-    }
   
   
   //-------------------------------keyboard

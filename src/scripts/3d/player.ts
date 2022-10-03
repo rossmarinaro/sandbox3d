@@ -61,24 +61,20 @@ export class Player {
     {
 
 
-
         this.scene.third.physics.add.existing(this.self.obj, {shape: 'capsule', mass: 1.8, radius: 3, offset: { y: 5 }, height: 30});
         this.self.obj.body.setAngularFactor(0, 0, 0);
         this.self.obj.body.setFriction(0.1);
         this.self.obj.body.setGravity(0, -200, 0);
         this.self.obj.body.setPosition(150, 0, 50);
 
-
         this.self.obj.body.on.collision(async (otherObject, event) => {
 
           if (otherObject.name === 'ladder')
-            this.self.obj.body.setVelocityY(100);
+            this.self.obj.body.setVelocityY(100);  
      
-
 
         });
 
-      
 
     }
 
@@ -96,14 +92,7 @@ export class Player {
 
     }
 
- 
-  //---------------------------------------------------- default stances
 
-
-    public defaultStance(time: number, joystick1: any, keys: any, leftStick: any): void
-    {
-   
-    }
 
   //--------------------------------------------------- player crouch
 
@@ -124,14 +113,10 @@ export class Player {
     public idle(): void
     {
 
-
-      this.setState(this.currentEquipped.key === 'rolling_pin1' ? 'idle' : 'Rifle Idle');
-
       this.self.obj.body.setVelocityX(0);
       this.self.obj.body.setVelocityZ(0);  
       this.self.obj.body.setAngularVelocityY(0);
-        
-     
+  
     }
 
 
@@ -147,8 +132,7 @@ export class Player {
       this.canJump = false;
 
       this.setState('jump');
-      
-      System.app.audio.play('huh', 1, false, this.scene, 0); 
+    
 
       this.self.obj.body.applyImpulse({x: 0, y: 150, z: 0}, {x: 0, y: -200, z: 0})
 
@@ -194,8 +178,6 @@ export class Player {
         this.self.obj.body.setVelocityX(-x);
         this.self.obj.body.setVelocityZ(-z);
       }
-
-      this.setState(this.currentEquipped.key === 'rolling_pin1' ? 'run_no_gun' : 'Rifle Run');
 
       if (this.self.obj.body) 
         this.self.obj.body.setAngularVelocityY(0);
@@ -307,7 +289,6 @@ export class Player {
         pos.copy(this.raycaster.ray.direction);
         pos.multiplyScalar(0.8 + this.movement.z);
         pos.add(this.raycaster.ray.origin);
-
 
         this.raycaster.ray.origin.copy(this.scene.third.camera.position);
 

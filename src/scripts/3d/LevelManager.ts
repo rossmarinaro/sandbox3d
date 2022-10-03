@@ -16,13 +16,12 @@ export class LevelManager {
     LevelManager.level = new Actor(scene, false, LevelManager.currentLevel, 'level', 0, 0, 0);
 
     await LevelManager.level.preload();
+    await LevelManager.setCollisions(scene);
 
     switch (LevelManager.currentLevel)
     {
       case 'level': Level(scene); break;
     }
-
-    await LevelManager.setCollisions(scene);
 
     return true;
 

@@ -137,10 +137,11 @@ export class Utils {
         actorA: typeof System.app.sys3d.player | typeof System.app.sys3d.actor, 
         actorB: typeof System.app.sys3d.player | typeof System.app.sys3d.actor
 
-    ): number
+    ): Readonly<number>
     {
         let posA = actorA['obj'].position,
             posB = actorB['obj'].position,
+            
             vecA = new THREE.Vector3(posA.x, posA.y, posA.z),
             vecB = new THREE.Vector3(posB.x, posB.y, posB.z), 
 

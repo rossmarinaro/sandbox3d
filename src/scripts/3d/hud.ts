@@ -57,9 +57,10 @@ export class HUD {
 
       if (botA[0].obj)
       {
-              
+       
+
         let direction: any = null,
-            dotProduct = Utils.getDotProduct(player.self, botA[0]);
+            dotProduct = Utils.getDotProduct(player.self, botA[0]); 
 
         if (player.raycaster.ray)
             direction = this.scene.third.camera.getWorldDirection(player.raycaster.ray.direction);
@@ -76,6 +77,7 @@ export class HUD {
             
         if (!bonePos)
           return;
+
           
         this.textA.setText(`Normalized Direction: { X: ${direction.normalize().x.toFixed(2)}, Y: ${direction.normalize().y.toFixed(2)}, Z: ${direction.normalize().z.toFixed(2)} }`);
         this.textB.setText(`Your Position: { X: ${playerPosition.x.toFixed(2)}, Y: ${playerPosition.y.toFixed(2)}, Z: ${playerPosition.z.toFixed(2)} }`);

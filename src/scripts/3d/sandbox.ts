@@ -23,7 +23,7 @@ export class Sandbox3D extends Scene3D {
 
 
     constructor(){
-        super({key:'Sandbox3D'});
+        super({key: 'Sandbox3D'});
     }
     public init(scene: Phaser.Scene): void
     {
